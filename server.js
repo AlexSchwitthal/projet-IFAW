@@ -1,16 +1,11 @@
 const express = require("express");
 const app = express();
 const bodyParser = require('body-parser');
-var queries = require('./models/queries.js');
 
-/* queries.callAPI("http://localhost:3500/users").then((data) => {
-	const response = {
-		statusCode: 200,
-		body: JSON.stringify(data),
-	};
-	console.log(response);
-return response;
-}); */
+const db = require('./models/db.js').connectToDB();
+const users = require('./models/collections.js').users();
+const queries = require('./models/queries.js');
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
@@ -32,9 +27,8 @@ app.post('/login', (req, res) => {
 
 app.get('/users', (req, res) => {
 	console.log();
-	queries.callAPI("http://localhost:3000/users").then((data, err) => {
-		if(err) return err;
-		res.render('users', {users: data})
+	queries.getAllUsers(users).then(allUsers => {
+		res.render('users', {users: allUsers});
 	}).catch(err => res.render('users'));
 })
 
