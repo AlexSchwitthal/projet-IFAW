@@ -12,10 +12,21 @@ app.use(express.static('public'));
 app.set('view engine', 'ejs');
 
 
+//
+
 app.get('/', (req, res) => {
 	res.render('login');
 });
 
+app.get('/register', (req, res) => {
+	res.render('register');
+})
+
+app.post('/register', (req, res) => {
+	queries.addUser(users, req.body.username, req.body.password);
+	res.redirect('/');
+	//res.render('loginForm', {username: req.body.username, password: req.body.password});
+});
 
 app.get('/login', (req, res) => {
 	res.render('login');
@@ -35,7 +46,6 @@ app.get('/users', (req, res) => {
 app.get('/test/:id', (req, res) => {
     res.render('test', {id: req.params.id});
 });
-
 
 app.get('/test', (req, res) => {
 	res.render('test');

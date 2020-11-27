@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Titre de la page</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <%- include('header'); %>
+        <h1>Inscription</h1>
+        <br>
+        <form action="register" method="post">
+            <div class="form-group">
+                <div>
+                    <label for="validationFormulaire">Nom d'utilisateur :</label>
+                    <input type="text" id="username" name="username" class="form-control" maxlength="15" required>
+                    <br />
+                </div>
+                <div>
+                    <label for="mdp">Mot de passe :</label>
+                    <input type="password" id="password" name="password" class="form-control" maxlength="15" required>
+                    <br />
+                </div>
+                <hr>
+                <div>
+                    <input type="submit" value="Valider" class="btn btn-primary">
+
+                    <input type="reset" value="Effacer" class="btn btn-danger">
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

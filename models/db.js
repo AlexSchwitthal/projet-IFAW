@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 
-
 DB_SRV = require('./../config.json').DB_SRV;
 DB_NAME = require('./../config.json').DB_NAME;
 DB_USER = require('./../config.json').DB_USER;

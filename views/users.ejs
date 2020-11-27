@@ -18,7 +18,7 @@
             <%
             if(locals.users) {
                 for(var user of users) {
-                %> <p> <%= user.prenom + " " + user.nom %>  </p> <%
+                %> <p> <%= user.login + " " + user.password %>  </p> <%
                 }
             } 
             else {
