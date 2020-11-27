@@ -1,7 +1,13 @@
 const express = require("express");
-const app = express();
+var session = require('express-session');
 const bodyParser = require('body-parser');
 
+// initialisation de l'application et de la session
+const app = express();
+app.use(session({secret:'XASDASDA'}));
+var ssn;
+
+// DB
 const db = require('./models/db.js').connectToDB();
 const users = require('./models/collections.js').users();
 const queries = require('./models/queries.js');
@@ -11,32 +17,55 @@ app.use(express.static('public'));
 
 app.set('view engine', 'ejs');
 
+app.use(function(req, res, next) {
+	ssn = req.session; 
+	if(ssn.login) {
+		res.locals.login = ssn.login;
+		res.locals.password = ssn.password;
+	}
+	next();
+});
 
-//
 
 app.get('/', (req, res) => {
-	res.render('login');
+	res.redirect('login');
 });
 
-app.get('/register', (req, res) => {
-	res.render('register');
-})
 
-app.post('/register', (req, res) => {
-	queries.addUser(users, req.body.username, req.body.password);
-	res.redirect('/');
-	//res.render('loginForm', {username: req.body.username, password: req.body.password});
-});
-
-app.get('/login', (req, res) => {
+app.get('/login', isNotAuthenticated, (req, res) => {
 	res.render('login');
 });
 
 app.post('/login', (req, res) => {
-	res.render('loginForm', {username: req.body.username, password: req.body.password});
+	queries.getSpecificUser(users, req.body.username, req.body.password).then(result => {
+		if(result != null) {
+			ssn = req.session;
+			ssn.login = req.body.username;
+			ssn.password = req.body.password;
+			res.redirect('/users');
+		}
+		else {
+			res.redirect('/login');
+		}
+	});
 });
 
-app.get('/users', (req, res) => {
+app.get('/logout', isAuthenticated, (req, res) => {
+	req.session.destroy();
+	res.redirect('/login');
+});
+
+app.get('/register', isNotAuthenticated, (req, res) => {
+	res.render('register');
+})
+
+app.post('/register', (req, res) => {
+	queries.addUser(users, req.body.username.toLowerCase(), req.body.password);
+	res.redirect('/login');
+});
+
+
+app.get('/users', isAuthenticated, (req, res) => {
 	console.log();
 	queries.getAllUsers(users).then(allUsers => {
 		res.render('users', {users: allUsers});
@@ -58,3 +87,20 @@ app.all('*', function(req, res) {
 app.listen(4200,() => {
 	console.log("j'écoute sur le port 4200");
 });
+
+
+function isAuthenticated(req, res, next) {
+	ssn = req.session; 
+	if(ssn.login) {
+		return next();
+	}
+	res.redirect('/login');
+}
+
+function isNotAuthenticated(req, res, next) {
+	ssn = req.session; 
+	if(ssn.login == undefined) {
+		return next();
+	}
+	res.redirect('/users');
+}

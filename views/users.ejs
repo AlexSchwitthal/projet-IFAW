@@ -14,17 +14,15 @@
         </div>
         <br>
         <div>
-
             <%
             if(locals.users) {
                 for(var user of users) {
-                %> <p> <%= user.login + " " + user.password %>  </p> <%
+                %> <%= user.login + " " + user.password %><br><%
                 }
             } 
             else {
-                %><p>une erreur est survenue</p><%
+                %>une erreur est survenue<%
             }
-
             %>
         </div>
     </div>

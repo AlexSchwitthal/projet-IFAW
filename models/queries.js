@@ -19,6 +19,13 @@ module.exports = {
         newUser.save(function (error) {
             if (error) return console.error(error);
         });
+    },
+
+    getSpecificUser: (users, login, password) => {
+        return users.findOne({login : login, password: password},(error, users) => {
+            if(error) return console.error(error);
+            return users;
+        });
     }
 };
   
