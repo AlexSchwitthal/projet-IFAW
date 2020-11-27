@@ -10,7 +10,13 @@
     <div class="container">
         <%- include('header'); %>
         <div>
-            la valeur passé en paramètre est <%= id %>
+            la valeur passé en paramètre est 
+            <% if(locals.id) {
+				%> <%= id %> <%
+			}
+			else {
+				%> inconnue <%
+			}%>
         </div>
     </div>
 </body>

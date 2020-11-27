@@ -1,2 +1,4 @@
-/node_modules/*
-package-lock.json
+ifaw-app/node_modules/*
+ifaw-app/package-lock.json
+ifaw-api/node_modules/*
+ifaw-api/package-lock.json
