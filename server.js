@@ -10,11 +10,12 @@ var ssn;
 // DB
 const db = require('./models/db.js').connectToDB();
 const users = require('./models/collections.js').users();
+const boards = require('./models/collections.js').boards();
 const queries = require('./models/queries.js');
 
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json()); 
 app.use(express.static('public'));
-
 app.set('view engine', 'ejs');
 
 app.use(function(req, res, next) {
@@ -42,7 +43,7 @@ app.post('/login', (req, res) => {
 			ssn = req.session;
 			ssn.login = req.body.username;
 			ssn.password = req.body.password;
-			res.redirect('/users');
+			res.redirect('/notes');
 		}
 		else {
 			res.redirect('/login');
@@ -60,10 +61,34 @@ app.get('/register', isNotAuthenticated, (req, res) => {
 })
 
 app.post('/register', (req, res) => {
-	queries.addUser(users, req.body.username.toLowerCase(), req.body.password);
-	res.redirect('/login');
+	try {
+		queries.addUser(users, req.body.username.toLowerCase(), req.body.password);
+		res.redirect('/login');
+	}
+	catch(e) {
+		res.redirect('/register');
+	}
 });
 
+app.get('/notes', isAuthenticated, (req, res) => {
+	try {
+		queries.findBoardById(users, boards, ssn.login, ssn.password).then(board => {
+			if(board != null) {
+				res.render('notes', {notes: board.notes});
+			}
+			else {
+				queries.addBoard(users, boards, ssn.login, ssn.password);
+				queries.findBoardById(users, boards, ssn.login, ssn.password).then(newBoard => {
+					res.render('notes', {notes: newBoard.notes});
+				});
+				//res.render('notes');
+			}
+		});
+	}
+	catch(e) {
+		res.redirect("/users");
+	}
+});
 
 app.get('/users', isAuthenticated, (req, res) => {
 	console.log();
@@ -80,6 +105,30 @@ app.get('/test', (req, res) => {
 	res.render('test');
 });
 
+// DEBUT APPEL AJAX
+app.put('/saveNote', (req, res) => {
+	try {
+		if(req.body._id != "") {
+			queries.findBoardById(users, boards, ssn.login, ssn.password).then(board => {
+				queries.editNote(users, boards, board, req.body._id, req.body.text);
+			})
+		}
+	}
+	catch(err) {
+		console.log(err);
+	}
+
+})
+
+app.put('/addNote', (req, res) => {
+	queries.findBoardById(users, boards, ssn.login, ssn.password).then(board => {
+		var newNote = queries.addNote(users, boards, board, "new note");
+		res.send(newNote);
+	})
+});
+// FIN APPEL AJAX
+
+
 app.all('*', function(req, res) {
     res.render('login');
 })
@@ -89,6 +138,8 @@ app.listen(4200,() => {
 });
 
 
+
+// check login
 function isAuthenticated(req, res, next) {
 	ssn = req.session; 
 	if(ssn.login) {

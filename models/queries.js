@@ -1,15 +1,14 @@
 const mongoose = require('mongoose');
 
 module.exports = {
-	getAllUsers: (users) => {
+	getAllUsers: function(users) {
         return users.find((error, users) => {
             if(error) return console.error(error);
             return users;
         });
     },
 
-    addUser: (users, login, password) => {
-
+    addUser: function(users, login, password) {
         const newUser = new users({ 
             _id : mongoose.Types.ObjectId(),
             login: login, 
@@ -17,15 +16,81 @@ module.exports = {
         });
 
         newUser.save(function (error) {
-            if (error) return console.error(error);
+            if (error) {
+                console.error(error);
+                return error;
+            };
         });
     },
 
-    getSpecificUser: (users, login, password) => {
-        return users.findOne({login : login, password: password},(error, users) => {
+    getSpecificUser: function(users, login, password) {
+        return users.findOne({login : login, password: password},(error, user) => {
             if(error) return console.error(error);
-            return users;
+            return user;
         });
+    },
+
+
+    findBoardById: function(users, boards, login, password) {
+        try {
+            return this.getSpecificUser(users, login, password).then(currentUser => {
+                return boards.findOne({creator_id : currentUser._id}, (error, board) => {
+                    if(error) return console.error(error);
+                    return board;
+                });
+            });
+        }
+        catch(err) {
+            console.log(err);
+        }
+
+    },
+
+    addBoard: function(users, boards, login, password) {
+        this.getSpecificUser(users, login, password).then(currentUser => {
+            const newBoard = new boards({
+                _id : mongoose.Types.ObjectId(),
+                creator_id : currentUser._id,
+                creator_name : currentUser.login,
+                notes: [],
+                users: []
+            });
+
+            newBoard.save(function (error) {
+                if (error) {
+                    console.error(error);
+                    return error;
+                };
+            });
+        });
+    },
+
+    addNote: function(users, boards, board, text) {
+        var newNote = {
+            _id : mongoose.Types.ObjectId(),
+            text: text
+        }
+        board.notes.push(newNote);
+        board.save();
+        return newNote;
+    },
+
+    editNote: function(users, boards, board, noteId, text) {
+        boards.updateOne(
+        { 
+            "_id": mongoose.Types.ObjectId(board._id),
+            "notes._id": mongoose.Types.ObjectId(noteId)  
+        }, 
+        { 
+            "$set": 
+            { 
+               "notes.$.text": text
+            }
+        }, 
+        function(err) {
+            if(err) return err;
+        });
+        board.save();
     }
 };
   

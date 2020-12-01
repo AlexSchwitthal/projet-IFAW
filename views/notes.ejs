@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Titre de la page</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/notes.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="/js/notes.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <%- include('header'); %>
+        <h1>Mes notes</h1>
+        <br>
+        <button type="button" id="addNote" class="btn btn-success">Ajouter une note</button>
+        <br>
+        <br>
+        <div class="notes" style="border:1px solid black">
+            <ul>
+                <% 
+                if(notes) {
+                    for(let note of notes) {
+                    %>
+                    <li>
+                        <p contentEditable="true" id="<%=note._id%>"><%=note.text%></p>
+                    </li>
+                    <%
+                    } 
+                }
+                %>
+            </ul>
+        </div>
+        <br>
+        <br>
+    </div>
+</body>
+</html>
