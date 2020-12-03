@@ -93,6 +93,27 @@ module.exports = {
             if(err) return err;
         });
         board.save();
+    },
+
+    deleteNote: function(board, noteId) {
+        boards.updateOne(
+            {
+                _id: mongoose.Types.ObjectId(board._id)
+            }, 
+            {
+                $pull: 
+                {
+                    notes: 
+                    {
+                        _id: mongoose.Types.ObjectId(noteId)
+                    }
+                }
+            }, 
+            function(err){
+                if(err) return err;
+            }
+        );
+        board.save();
     }
 };
   

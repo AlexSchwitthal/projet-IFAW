@@ -24,7 +24,8 @@
                     for(let note of notes) {
                     %>
                     <li>
-                        <p contentEditable="true" id="<%=note._id%>"><%=note.text%></p>
+                        <p contentEditable="true" id="<%= note._id %>"><%= note.text %></p>
+                        <button class="deleteNote">✘</button>
                     </li>
                     <%
                     } 

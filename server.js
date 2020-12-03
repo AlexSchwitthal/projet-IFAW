@@ -89,7 +89,6 @@ app.get('/notes', isAuthenticated, (req, res) => {
 });
 
 app.get('/users', isAuthenticated, (req, res) => {
-	console.log();
 	queries.getAllUsers().then(allUsers => {
 		res.render('users', {users: allUsers});
 	}).catch(err => res.render('users'));
@@ -115,13 +114,20 @@ app.put('/saveNote', (req, res) => {
 	catch(err) {
 		console.log(err);
 	}
-
-})
+});
 
 app.put('/addNote', (req, res) => {
 	queries.findBoardById(ssn.login, ssn.password).then(board => {
 		var newNote = queries.addNote(board, "new note");
 		res.send(newNote);
+	})
+});
+
+
+app.delete('/deleteNote', (req, res) => {
+	queries.findBoardById(ssn.login, ssn.password).then(board => {
+		queries.deleteNote(board, req.body._id);
+		res.send("success");
 	})
 });
 // FIN APPEL AJAX
