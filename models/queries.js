@@ -1,14 +1,16 @@
 const mongoose = require('mongoose');
+const users = require('./collections.js').users();
+const boards = require('./collections.js').boards();
 
 module.exports = {
-	getAllUsers: function(users) {
+	getAllUsers: function() {
         return users.find((error, users) => {
             if(error) return console.error(error);
             return users;
         });
     },
 
-    addUser: function(users, login, password) {
+    addUser: function(login, password) {
         const newUser = new users({ 
             _id : mongoose.Types.ObjectId(),
             login: login, 
@@ -23,7 +25,7 @@ module.exports = {
         });
     },
 
-    getSpecificUser: function(users, login, password) {
+    getSpecificUser: function(login, password) {
         return users.findOne({login : login, password: password},(error, user) => {
             if(error) return console.error(error);
             return user;
@@ -31,9 +33,9 @@ module.exports = {
     },
 
 
-    findBoardById: function(users, boards, login, password) {
+    findBoardById: function(login, password) {
         try {
-            return this.getSpecificUser(users, login, password).then(currentUser => {
+            return this.getSpecificUser(login, password).then(currentUser => {
                 return boards.findOne({creator_id : currentUser._id}, (error, board) => {
                     if(error) return console.error(error);
                     return board;
@@ -46,7 +48,7 @@ module.exports = {
 
     },
 
-    addBoard: function(users, boards, login, password) {
+    addBoard: function(login, password) {
         this.getSpecificUser(users, login, password).then(currentUser => {
             const newBoard = new boards({
                 _id : mongoose.Types.ObjectId(),
@@ -65,7 +67,7 @@ module.exports = {
         });
     },
 
-    addNote: function(users, boards, board, text) {
+    addNote: function(board, text) {
         var newNote = {
             _id : mongoose.Types.ObjectId(),
             text: text
@@ -75,7 +77,7 @@ module.exports = {
         return newNote;
     },
 
-    editNote: function(users, boards, board, noteId, text) {
+    editNote: function(board, noteId, text) {
         boards.updateOne(
         { 
             "_id": mongoose.Types.ObjectId(board._id),

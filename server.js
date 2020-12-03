@@ -9,8 +9,6 @@ var ssn;
 
 // DB
 const db = require('./models/db.js').connectToDB();
-const users = require('./models/collections.js').users();
-const boards = require('./models/collections.js').boards();
 const queries = require('./models/queries.js');
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -38,7 +36,7 @@ app.get('/login', isNotAuthenticated, (req, res) => {
 });
 
 app.post('/login', (req, res) => {
-	queries.getSpecificUser(users, req.body.username, req.body.password).then(result => {
+	queries.getSpecificUser(req.body.username, req.body.password).then(result => {
 		if(result != null) {
 			ssn = req.session;
 			ssn.login = req.body.username;
@@ -62,7 +60,7 @@ app.get('/register', isNotAuthenticated, (req, res) => {
 
 app.post('/register', (req, res) => {
 	try {
-		queries.addUser(users, req.body.username.toLowerCase(), req.body.password);
+		queries.addUser(req.body.username.toLowerCase(), req.body.password);
 		res.redirect('/login');
 	}
 	catch(e) {
@@ -72,13 +70,13 @@ app.post('/register', (req, res) => {
 
 app.get('/notes', isAuthenticated, (req, res) => {
 	try {
-		queries.findBoardById(users, boards, ssn.login, ssn.password).then(board => {
+		queries.findBoardById(ssn.login, ssn.password).then(board => {
 			if(board != null) {
 				res.render('notes', {notes: board.notes});
 			}
 			else {
-				queries.addBoard(users, boards, ssn.login, ssn.password);
-				queries.findBoardById(users, boards, ssn.login, ssn.password).then(newBoard => {
+				queries.addBoard(ssn.login, ssn.password);
+				queries.findBoardById(ssn.login, ssn.password).then(newBoard => {
 					res.render('notes', {notes: newBoard.notes});
 				});
 				//res.render('notes');
@@ -92,7 +90,7 @@ app.get('/notes', isAuthenticated, (req, res) => {
 
 app.get('/users', isAuthenticated, (req, res) => {
 	console.log();
-	queries.getAllUsers(users).then(allUsers => {
+	queries.getAllUsers().then(allUsers => {
 		res.render('users', {users: allUsers});
 	}).catch(err => res.render('users'));
 })
@@ -109,8 +107,8 @@ app.get('/test', (req, res) => {
 app.put('/saveNote', (req, res) => {
 	try {
 		if(req.body._id != "") {
-			queries.findBoardById(users, boards, ssn.login, ssn.password).then(board => {
-				queries.editNote(users, boards, board, req.body._id, req.body.text);
+			queries.findBoardById(ssn.login, ssn.password).then(board => {
+				queries.editNote(board, req.body._id, req.body.text);
 			})
 		}
 	}
@@ -121,8 +119,8 @@ app.put('/saveNote', (req, res) => {
 })
 
 app.put('/addNote', (req, res) => {
-	queries.findBoardById(users, boards, ssn.login, ssn.password).then(board => {
-		var newNote = queries.addNote(users, boards, board, "new note");
+	queries.findBoardById(ssn.login, ssn.password).then(board => {
+		var newNote = queries.addNote(board, "new note");
 		res.send(newNote);
 	})
 });
