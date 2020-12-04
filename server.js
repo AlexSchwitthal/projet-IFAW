@@ -75,6 +75,8 @@ app.get('/notes', isAuthenticated, (req, res) => {
 				res.render('notes', {notes: board.notes});
 			}
 			else {
+				console.log(ssn.login);
+				console.log(ssn.password);
 				queries.addBoard(ssn.login, ssn.password);
 				queries.findBoardById(ssn.login, ssn.password).then(newBoard => {
 					res.render('notes', {notes: newBoard.notes});

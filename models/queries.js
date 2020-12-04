@@ -49,7 +49,7 @@ module.exports = {
     },
 
     addBoard: function(login, password) {
-        this.getSpecificUser(users, login, password).then(currentUser => {
+        this.getSpecificUser(login, password).then(currentUser => {
             const newBoard = new boards({
                 _id : mongoose.Types.ObjectId(),
                 creator_id : currentUser._id,
