@@ -33,13 +33,40 @@ module.exports = {
     },
 
 
-    findBoardById: function(login, password) {
+    findBoardById: async function(login, password) {
         try {
-            return this.getSpecificUser(login, password).then(currentUser => {
-                return boards.findOne({creator_id : currentUser._id}, (error, board) => {
-                    if(error) return console.error(error);
-                    return board;
-                });
+            const currentUser = await this.getSpecificUser(login, password);
+            return boards.findOne({ creator_id: currentUser._id }, (error, board) => {
+                if (error)
+                    return console.error(error);
+                return board;
+            });
+        }
+        catch(err) {
+            console.log(err);
+        }
+    },
+
+    findBoardByName: function(userId, boardName) {
+        try {
+            return boards.findOne({ creator_id: userId, name: boardName }, (error, board) => {
+                if (error)
+                    return console.error(error);
+                return board;
+            });
+        }
+        catch(err) {
+            console.log(err);
+        }
+    },
+
+    findAllBoardsById: async function(login, password) {
+        try {
+            const currentUser = await this.getSpecificUser(login, password);
+            return boards.find({ creator_id: currentUser._id }, (error, board) => {
+                if (error)
+                    return console.error(error);
+                return board;
             });
         }
         catch(err) {
@@ -48,23 +75,27 @@ module.exports = {
 
     },
 
-    addBoard: function(login, password) {
-        this.getSpecificUser(login, password).then(currentUser => {
-            const newBoard = new boards({
-                _id : mongoose.Types.ObjectId(),
-                creator_id : currentUser._id,
-                creator_name : currentUser.login,
-                notes: [],
-                users: []
-            });
-
-            newBoard.save(function (error) {
-                if (error) {
-                    console.error(error);
-                    return error;
-                };
-            });
+    addBoard: async function(login, password, boardName) {
+        const currentUser = await this.getSpecificUser(login, password);
+        const checkBoard = await this.findBoardByName(currentUser._id, boardName);
+        if(checkBoard != null) {
+            return "error";
+        }
+        const newBoard = new boards({
+            _id: mongoose.Types.ObjectId(),
+            name: boardName,
+            creator_id: currentUser._id,
+            creator_name: currentUser.login,
+            notes: [],
+            users: []
         });
+        newBoard.save(function (error) {
+            if (error) {
+                console.error(error);
+                return error;
+            }
+        });
+        return newBoard;
     },
 
     addNote: function(board, text) {

@@ -26,6 +26,10 @@ app.use(function(req, res, next) {
 });
 
 
+/* queries.findAllBoardsById("abc", "def").then(allBoards => {
+	console.log(allBoards);
+}) */
+
 app.get('/', (req, res) => {
 	res.redirect('login');
 });
@@ -68,20 +72,17 @@ app.post('/register', (req, res) => {
 	}
 });
 
-app.get('/notes', isAuthenticated, (req, res) => {
+/* app.get('/notes', isAuthenticated, (req, res) => {
 	try {
 		queries.findBoardById(ssn.login, ssn.password).then(board => {
 			if(board != null) {
 				res.render('notes', {notes: board.notes});
 			}
 			else {
-				console.log(ssn.login);
-				console.log(ssn.password);
-				queries.addBoard(ssn.login, ssn.password);
+				queries.addBoard(ssn.login, ssn.password, "tableau n°1");
 				queries.findBoardById(ssn.login, ssn.password).then(newBoard => {
 					res.render('notes', {notes: newBoard.notes});
 				});
-				//res.render('notes');
 			}
 		});
 	}
@@ -89,6 +90,34 @@ app.get('/notes', isAuthenticated, (req, res) => {
 		res.redirect("/users");
 	}
 });
+ */
+
+app.get('/notes', isAuthenticated, (req, res) => {
+	try {
+		queries.findAllBoardsById(ssn.login, ssn.password).then(allBoards => {
+			if(allBoards != null) {
+				res.render('notes', {notes: allBoards[0].notes, boards: allBoards});
+			}
+			else {
+				queries.addBoard(ssn.login, ssn.password, "Tableau n°1");
+				queries.findBoardById(ssn.login, ssn.password).then(newBoard => {
+					var newBoards = [newBoard];
+					res.render('notes', {notes: newBoard.notes[0], boards: newBoards});
+				});
+			}
+		})
+/* 		queries.findBoardById(ssn.login, ssn.password).then(board => {
+			if(board != null) {
+				res.render('notes', {notes: board.notes});
+			}
+			
+		}); */
+	}
+	catch(e) {
+		res.redirect("/users");
+	}
+});
+
 
 app.get('/users', isAuthenticated, (req, res) => {
 	queries.getAllUsers().then(allUsers => {
@@ -125,6 +154,17 @@ app.put('/addNote', (req, res) => {
 	})
 });
 
+app.put('/addBoard', (req, res) => {
+	queries.addBoard(ssn.login, ssn.password, req.body.boardName).then(newBoard => {
+		if(newBoard == "error") {
+			res.status(500).send({error: 'you have an error'}); 
+		}
+		else {
+			res.send(newBoard);
+		}
+		//console.log(newBoard);
+	});
+});
 
 app.delete('/deleteNote', (req, res) => {
 	queries.findBoardById(ssn.login, ssn.password).then(board => {

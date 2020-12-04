@@ -12,7 +12,8 @@ module.exports = {
 
 	boards: function() {
 		const boardsSchema = new mongoose.Schema({
-			_id:  Object,
+			_id: Object,
+			name: {type : String, unique : true},
 			creator_id : Object,
 			creator_name: String,
 			notes : Array,

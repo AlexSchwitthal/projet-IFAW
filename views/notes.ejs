@@ -15,6 +15,23 @@
         <h1>Mes notes</h1>
         <br>
         <button type="button" id="addNote" class="btn btn-success">Ajouter une note</button>
+        <button type="button" id="addBoard" class="btn btn-primary">Créer un nouveau tableau</button>
+
+        <span class="float-right">
+            <select class="form-control">
+                <%
+                if(boards) {
+                    for(let board of boards) {
+                        %> <option value="<%= board._id %>"><%= board.name %></option> <% 
+                    }
+                }
+                %> 
+            </select>
+        </span>
+        
+        <span class="float-right" id="selectBoard">
+            <p>Sélectionner un tableau : </p>
+        </span>
         <br>
         <br>
         <div class="notes" style="border:1px solid black">
@@ -24,7 +41,7 @@
                     for(let note of notes) {
                     %>
                     <li>
-                        <p contentEditable="true" id="<%= note._id %>"><%= note.text %></p>
+                        <p maxlength="10" contentEditable="true" id="<%= note._id %>"><%= note.text %></p>
                         <button class="deleteNote">✘</button>
                     </li>
                     <%
