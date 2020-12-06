@@ -6,7 +6,7 @@ $(document).ready(function() {
             url : "addNote",
             contentType: "application/json; charset=utf-8",
             success : function(newNote) {
-                $(".notes > ul").append('<li><p contentEditable="true" id=' + newNote._id +'>' + newNote.text + '</p><button class="deleteNote">✘</button></li>');
+                $(".notes > ul").append('<li><p contentEditable="true" id=' + newNote._id +'>' + newNote.text + '</p><button class="deleteNote"><img width="13" height="13" src ="/img/ColorWheel.png"/></button>' + '<button class="deleteNote">✘</button></li>');
             }
         });
     });
