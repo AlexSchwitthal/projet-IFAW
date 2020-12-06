@@ -72,25 +72,6 @@ app.post('/register', (req, res) => {
 	}
 });
 
-/* app.get('/notes', isAuthenticated, (req, res) => {
-	try {
-		queries.findBoardById(ssn.login, ssn.password).then(board => {
-			if(board != null) {
-				res.render('notes', {notes: board.notes});
-			}
-			else {
-				queries.addBoard(ssn.login, ssn.password, "tableau n°1");
-				queries.findBoardById(ssn.login, ssn.password).then(newBoard => {
-					res.render('notes', {notes: newBoard.notes});
-				});
-			}
-		});
-	}
-	catch(e) {
-		res.redirect("/users");
-	}
-});
- */
 
 app.get('/notes', isAuthenticated, (req, res) => {
 	try {
@@ -106,12 +87,6 @@ app.get('/notes', isAuthenticated, (req, res) => {
 				});
 			}
 		})
-/* 		queries.findBoardById(ssn.login, ssn.password).then(board => {
-			if(board != null) {
-				res.render('notes', {notes: board.notes});
-			}
-			
-		}); */
 	}
 	catch(e) {
 		res.redirect("/users");
@@ -125,13 +100,6 @@ app.get('/users', isAuthenticated, (req, res) => {
 	}).catch(err => res.render('users'));
 })
 
-app.get('/test/:id', (req, res) => {
-    res.render('test', {id: req.params.id});
-});
-
-app.get('/test', (req, res) => {
-	res.render('test');
-});
 
 // DEBUT APPEL AJAX
 app.put('/saveNote', (req, res) => {
@@ -162,7 +130,6 @@ app.put('/addBoard', (req, res) => {
 		else {
 			res.send(newBoard);
 		}
-		//console.log(newBoard);
 	});
 });
 

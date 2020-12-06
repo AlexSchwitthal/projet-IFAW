@@ -18,7 +18,7 @@
         <button type="button" id="addBoard" class="btn btn-primary">Créer un nouveau tableau</button>
 
         <span class="float-right">
-            <select class="form-control">
+            <select class="form-control" id="listBoards">
                 <%
                 if(boards) {
                     for(let board of boards) {
@@ -41,7 +41,7 @@
                     for(let note of notes) {
                     %>
                     <li>
-                        <p maxlength="10" contentEditable="true" id="<%= note._id %>"><%= note.text %></p>
+                        <p maxlength="40" contentEditable="true" id="<%= note._id %>"><%= note.text %></p>
                         <button class="deleteNote"><img width="13" height="13" src ="/img/ColorWheel.png"/></button>
                         <button class="deleteNote">✘</button>
                     </li>

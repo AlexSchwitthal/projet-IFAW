@@ -109,6 +109,13 @@ module.exports = {
     },
 
     editNote: function(board, noteId, text) {
+        text = text.split('$nbsp;').join('');
+        text = text.split('$amp;').join('');
+        text = text.split('&lt;').join('');
+        text = text.split('$gt;').join('');
+        text = text.split('<br>').join('');
+        text = text.split('<div>').join('');
+        text = text.split('</div>').join('');
         boards.updateOne(
         { 
             "_id": mongoose.Types.ObjectId(board._id),

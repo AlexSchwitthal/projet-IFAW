@@ -72,6 +72,11 @@ $(document).ready(function() {
             event.preventDefault();
         }
    });
+
+   $('#listBoards').change(function() {
+       console.log($(this).val());
+       console.log("mdr");
+    });
    
 });
 
