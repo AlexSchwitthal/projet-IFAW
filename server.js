@@ -25,6 +25,7 @@ app.use(function(req, res, next) {
 	next();
 });
 
+
 app.get('/', (req, res) => {
 	res.redirect('login');
 });
@@ -129,10 +130,10 @@ app.put('/saveNote', (req, res) => {
 });
 
 app.put('/addNote', (req, res) => {
-	queries.findBoardByUserId(ssn.login, ssn.password).then(board => {
+	queries.findBoardById(req.body.boardId).then(board => {
 		var newNote = queries.addNote(board, "new note");
 		res.send(newNote);
-	})
+	});
 });
 
 app.put('/addBoard', (req, res) => {

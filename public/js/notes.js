@@ -3,13 +3,15 @@ $(document).ready(function() {
 
     // ajout d'une note
     $("#addNote").click(function() {
+        var data = {};
+        data.boardId = $('#listBoards').val();
         $.ajax({
             type : "PUT",
             url : "addNote",
+            data: JSON.stringify(data),
             contentType: "application/json; charset=utf-8",
             success : function(newNote) {
                 $(".notes > ul").append(noteElement(newNote._id, newNote.text));
-              //  $(".notes > ul").append('<li><p contentEditable="true" id=' + newNote._id +'>' + newNote.text + '</p><button class="deleteNote"><img width="13" height="13" src ="/img/ColorWheel.png"/></button>' + '<button class="deleteNote">✘</button></li>');
             }
         });
     });
@@ -48,7 +50,7 @@ $(document).ready(function() {
 
     // ajout d'un tableau
     $("#addBoard").click(function() {
-        var boardName = window.prompt("veuillez saisir un nom pour votre nouveau tableau : ","");
+        var boardName = window.prompt("veuillez saisir un nom pour votre nouveau tableau : ", "");
         if(boardName != "") {
             var data = {};
             data.boardName = boardName;
