@@ -21,7 +21,7 @@ $(document).ready(function() {
         var data = {};
         data._id = this.id;
         data.text = $(this).html();
-
+        data.boardId = $('#listBoards').val();
         $.ajax({
             type : "PUT",
             url : "saveNote",
@@ -34,6 +34,7 @@ $(document).ready(function() {
     $('.notes ul').on('click', 'li button', (function() {
         var data = {};
         data._id = this.parentNode.firstElementChild.id;
+        data.boardId = $('#listBoards').val();
         var element = this;
         $.ajax({
             type : "DELETE",
@@ -47,6 +48,11 @@ $(document).ready(function() {
             }
         });
     }));
+
+    // ajout d'un utilisateur au tableau
+    $("#addUsers").click(function() {
+        console.log("test");
+    });
 
     // ajout d'un tableau
     $("#addBoard").click(function() {

@@ -119,7 +119,7 @@ app.post('/changeBoard', (req, res) => {
 app.put('/saveNote', (req, res) => {
 	try {
 		if(req.body._id != "") {
-			queries.findBoardByUserId(ssn.login, ssn.password).then(board => {
+			queries.findBoardById(req.body.boardId).then(board => {
 				queries.editNote(board, req.body._id, req.body.text);
 			})
 		}
@@ -148,7 +148,7 @@ app.put('/addBoard', (req, res) => {
 });
 
 app.delete('/deleteNote', (req, res) => {
-	queries.findBoardByUserId(ssn.login, ssn.password).then(board => {
+	queries.findBoardById(req.body.boardId).then(board => {
 		queries.deleteNote(board, req.body._id);
 		res.send("success");
 	})
