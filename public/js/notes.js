@@ -1,4 +1,6 @@
 $(document).ready(function() {
+    changeBoard($('#listBoards').val());
+
     // ajout d'une note
     $("#addNote").click(function() {
         $.ajax({
@@ -6,7 +8,8 @@ $(document).ready(function() {
             url : "addNote",
             contentType: "application/json; charset=utf-8",
             success : function(newNote) {
-                $(".notes > ul").append('<li><p contentEditable="true" id=' + newNote._id +'>' + newNote.text + '</p><button class="deleteNote"><img width="13" height="13" src ="/img/ColorWheel.png"/></button>' + '<button class="deleteNote">✘</button></li>');
+                $(".notes > ul").append(noteElement(newNote._id, newNote.text));
+              //  $(".notes > ul").append('<li><p contentEditable="true" id=' + newNote._id +'>' + newNote.text + '</p><button class="deleteNote"><img width="13" height="13" src ="/img/ColorWheel.png"/></button>' + '<button class="deleteNote">✘</button></li>');
             }
         });
     });
@@ -73,11 +76,41 @@ $(document).ready(function() {
         }
    });
 
+   // changement de tableau
    $('#listBoards').change(function() {
-       console.log($(this).val());
-       console.log("mdr");
+        var boardId = $(this).val();
+        changeBoard(boardId);
     });
-   
+
+
+    // fonction d'une note du tableau
+    function noteElement(id, text) {
+        var note = '<li><p contentEditable="true" id=' + id + '>' + text 
+        + '</p><button class="deleteNote"><img width="13" height="13" src ="/img/ColorWheel.png"/></button>' 
+        + '<button class="deleteNote">✘</button></li>';
+        return note;
+    }
+
+    // fonction de chargement de tableau
+    function changeBoard(boardId) {
+        var data = {};
+        data.boardId = boardId;
+        $.ajax({
+            type : "POST",
+            url : "changeBoard",
+            data: JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",
+            success : function(currentBoard) {
+                $(".notes > ul").empty();
+                for(let note of currentBoard) {
+                    $(".notes > ul").append(noteElement(note._id, note.text));
+                }
+            },
+            error: function () {
+                alert("une erreur est survenue lors du changement de tableau");
+            },
+        });
+    }
 });
 
 

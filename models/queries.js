@@ -32,8 +32,14 @@ module.exports = {
         });
     },
 
+    findBoardById : function(boardId) {
+        return boards.findOne({_id : mongoose.Types.ObjectId(boardId)},(error, board) => {
+            if(error) return console.error(error);
+            return board;
+        });
+    },
 
-    findBoardById: async function(login, password) {
+    findBoardByUserId: async function(login, password) {
         try {
             const currentUser = await this.getSpecificUser(login, password);
             return boards.findOne({ creator_id: currentUser._id }, (error, board) => {
@@ -60,7 +66,7 @@ module.exports = {
         }
     },
 
-    findAllBoardsById: async function(login, password) {
+    findAllBoardsByUserId: async function(login, password) {
         try {
             const currentUser = await this.getSpecificUser(login, password);
             return boards.find({ creator_id: currentUser._id }, (error, board) => {

@@ -36,19 +36,6 @@
         <br>
         <div class="notes" style="border:1px solid black">
             <ul>
-                <% 
-                if(notes) {
-                    for(let note of notes) {
-                    %>
-                    <li>
-                        <p maxlength="40" contentEditable="true" id="<%= note._id %>"><%= note.text %></p>
-                        <button class="deleteNote"><img width="13" height="13" src ="/img/ColorWheel.png"/></button>
-                        <button class="deleteNote">✘</button>
-                    </li>
-                    <%
-                    } 
-                }
-                %>
             </ul>
         </div>
         <br>

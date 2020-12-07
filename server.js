@@ -25,11 +25,6 @@ app.use(function(req, res, next) {
 	next();
 });
 
-
-/* queries.findAllBoardsById("abc", "def").then(allBoards => {
-	console.log(allBoards);
-}) */
-
 app.get('/', (req, res) => {
 	res.redirect('login');
 });
@@ -75,13 +70,13 @@ app.post('/register', (req, res) => {
 
 app.get('/notes', isAuthenticated, (req, res) => {
 	try {
-		queries.findAllBoardsById(ssn.login, ssn.password).then(allBoards => {
+		queries.findAllBoardsByUserId(ssn.login, ssn.password).then(allBoards => {
 			if(allBoards != null) {
 				res.render('notes', {notes: allBoards[0].notes, boards: allBoards});
 			}
 			else {
 				queries.addBoard(ssn.login, ssn.password, "Tableau n°1");
-				queries.findBoardById(ssn.login, ssn.password).then(newBoard => {
+				queries.findBoardByUserId(ssn.login, ssn.password).then(newBoard => {
 					var newBoards = [newBoard];
 					res.render('notes', {notes: newBoard.notes[0], boards: newBoards});
 				});
@@ -102,10 +97,28 @@ app.get('/users', isAuthenticated, (req, res) => {
 
 
 // DEBUT APPEL AJAX
+app.post('/changeBoard', (req, res) => {
+	try {
+		if(req.body.boardId != "") {
+			queries.findBoardById(req.body.boardId).then(board => {
+				if(board == null) {
+					res.status(500).send({error: 'une erreur est survenue !'}); 
+				}
+				else {
+					res.send(board.notes);
+				}
+			});
+		}
+	}
+	catch(err) {
+		console.log(err);
+	}
+});
+
 app.put('/saveNote', (req, res) => {
 	try {
 		if(req.body._id != "") {
-			queries.findBoardById(ssn.login, ssn.password).then(board => {
+			queries.findBoardByUserId(ssn.login, ssn.password).then(board => {
 				queries.editNote(board, req.body._id, req.body.text);
 			})
 		}
@@ -116,7 +129,7 @@ app.put('/saveNote', (req, res) => {
 });
 
 app.put('/addNote', (req, res) => {
-	queries.findBoardById(ssn.login, ssn.password).then(board => {
+	queries.findBoardByUserId(ssn.login, ssn.password).then(board => {
 		var newNote = queries.addNote(board, "new note");
 		res.send(newNote);
 	})
@@ -125,7 +138,7 @@ app.put('/addNote', (req, res) => {
 app.put('/addBoard', (req, res) => {
 	queries.addBoard(ssn.login, ssn.password, req.body.boardName).then(newBoard => {
 		if(newBoard == "error") {
-			res.status(500).send({error: 'you have an error'}); 
+			res.status(500).send({error: 'une erreur est survenue !'}); 
 		}
 		else {
 			res.send(newBoard);
@@ -134,7 +147,7 @@ app.put('/addBoard', (req, res) => {
 });
 
 app.delete('/deleteNote', (req, res) => {
-	queries.findBoardById(ssn.login, ssn.password).then(board => {
+	queries.findBoardByUserId(ssn.login, ssn.password).then(board => {
 		queries.deleteNote(board, req.body._id);
 		res.send("success");
 	})
