@@ -129,6 +129,9 @@ $(document).ready(function() {
 
     // suppression d'un utilisateur au tableau
     $(".dropdown-item .fa-times").click(function() {
+        var type = this.parentNode.parentNode;
+        var icon = this;
+        
         var data = {};
         data._id = this.parentNode.id;
         data.name = $(this.parentNode).find(">:first-child").html();
@@ -138,8 +141,12 @@ $(document).ready(function() {
             url : "removeUser",
             data: JSON.stringify(data),
             contentType: "application/json; charset=utf-8",
-            success : function(oldUser) {
-                
+            success : function() {
+                type.classList.remove("inside");
+                type.classList.add("outside");
+                icon.classList.remove("fa-times");
+                icon.classList.add("fa-plus");
+                icon.style.marginRight = "0px";
             },
         });
     });

@@ -145,13 +145,15 @@ app.put('/addNote', (req, res) => {
 app.put('/addUser', (req, res) => {
 	queries.findBoardById(req.body.boardId).then(board => {
 		queries.addUserToBoard(board, req.body._id, req.body.name);
+		res.send("success");
 	})
-	res.send("success");
+
 });
 
 app.delete('/removeUser', (req, res) => {
 	queries.findBoardById(req.body.boardId).then(board => {
-		console.log("mdr");
+		queries.removeUserFromBoard(board, req.body._id);
+		res.send("success");
 	})
 });
 

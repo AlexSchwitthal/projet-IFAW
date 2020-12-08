@@ -170,6 +170,28 @@ module.exports = {
         board.save();
     },
 
+    removeUserFromBoard: function(board, userId) {
+        boards.updateOne(
+            {
+                _id: mongoose.Types.ObjectId(board._id)
+            }, 
+            {
+                $pull: 
+                {
+                    users: 
+                    {
+                        _id: mongoose.Types.ObjectId(userId)
+                    }
+                }
+            }, 
+            function(err){
+                if(err) return err;
+            }
+        );
+        board.save();
+    },
+
+
     addUserToBoard: function(board, userId, userName) {
         if (board.users.some(e => e.name === userName)) {
             return "error";
