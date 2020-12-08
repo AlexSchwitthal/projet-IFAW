@@ -1,0 +1,46 @@
+<div>
+    <img id="logo" src="/img/postjs.png" alt="postjs" style="display:block;height:300px;margin:0 auto;">
+</div>
+
+<div class="float-right">
+    <% if(locals.login) {
+        %> vous êtes connecté en tant que : <%= locals.login %> <%
+    }
+    else {
+        %> mode invité <%
+    }
+    %>
+</div>
+<br>
+<nav class="navbar navbar-expand navbar-dark bg-dark">
+    <div class="collapse navbar-collapse">
+        <ul class="navbar-nav mr-auto">
+            <% if(locals.login) {
+                %>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/notes">Mes notes</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/users">Liste des utilisateurs</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/logout">Deconnexion<span class="sr-only">(current)</span></a>
+                </li>
+                <%
+            }
+            else {
+                %>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/register">Inscription</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/login">Connexion<span class="sr-only">(current)</span></a>
+                </li>
+                <%
+            }
+            %>
+        </ul>
+    </div>
+</nav>
+<hr>
+<br>

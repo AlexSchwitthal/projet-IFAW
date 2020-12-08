@@ -1,5 +1,7 @@
 $(document).ready(function() {
     var isTyping = false;
+    var modal = document.getElementById("modal1"); 
+    var spanCloseModal = document.getElementById("closeModal");
     changeBoard($('#listBoards').val());
 
      setInterval(function() { 
@@ -12,6 +14,7 @@ $(document).ready(function() {
     $("#addNote").click(function() {
         var data = {};
         data.boardId = $('#listBoards').val();
+        data.color = "#f6ff7a";
         $.ajax({
             type : "PUT",
             url : "addNote",
@@ -65,7 +68,7 @@ $(document).ready(function() {
 
 
     // choix de la couleur d'une note
-    $('.notes ul').on('click', 'li .chooseColor', (function() {        
+    $('.notes ul').on('click', 'li .chooseColor', (function() {       
         var data = {};
         data._id = this.parentNode.firstElementChild.id;
         data.boardId = $('#listBoards').val();
@@ -77,12 +80,56 @@ $(document).ready(function() {
             contentType: "application/json; charset=utf-8",            
             success : function(result) {
                 if (result == "success") {
-                    
-                    element.parentNode.style.backgroundColor = "#00FF00";
+                    modal.style.display = "block";
+                    let colorList = document.getElementById("colorList");
+                    let green = document.getElementById("colorGreen");
+                    let blue = document.getElementById("colorBlue");
+                    let yellow = document.getElementById("colorYellow");
+                    let orange = document.getElementById("colorOrange");
+                    let red = document.getElementById("colorRed");
+                    window.onclick = function(event) {
+                        if (event.target == green) {    
+                            modal.style.display = "none";                        
+                            element.parentNode.style.backgroundColor = "#86f789";
+                            data.color = "#86f789";                            
+                        }
+                        if (event.target == blue) { 
+                            modal.style.display = "none";                           
+                            element.parentNode.style.backgroundColor = "#6bbcf2";
+                            data.color = "#6bbcf2"; 
+                        }
+                        if (event.target == yellow) {
+                            modal.style.display = "none";
+                            element.parentNode.style.backgroundColor = "#f6ff7a";
+                            data.color = "#f6ff7a"; 
+                        }
+                        if (event.target == orange) {
+                            modal.style.display = "none";
+                            element.parentNode.style.backgroundColor = "#f5af5b";
+                            data.color = "#f5af5b"; 
+                        }
+                        if (event.target == red) {
+                            modal.style.display = "none";
+                            element.parentNode.style.backgroundColor = "#f26b6b";
+                            data.color = "#f26b6b"; 
+                        }
+                    }                    
                 }
             }
         });
     }));
+
+
+    // Fermetrure modal choix couleur
+    spanCloseModal.onclick = function() {
+        modal.style.display = "none";
+    }
+    window.onclick = function(event) {
+        if (event.target == modal) {
+          modal.style.display = "none";
+        }
+    }
+
 
     // suppression d'une note
     $('.notes ul').on('click', 'li .deleteNote', (function() {        
