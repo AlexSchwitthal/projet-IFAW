@@ -2,31 +2,49 @@
     <a class="navbar-brand" href="/notes">
         <img src="img/postjs.png" width="30" height="30" class="d-inline-block align-top" alt="">
         Post js
-      </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
     </button>
-  
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav mr-auto">
 
-        <li class="nav-item">
-            <a class="nav-link" href="/users">Liste des utilisateurs</a>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Mes tableaux
-          </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="#">Tableau 1</a>
-            <a class="dropdown-item" href="#">Tableau 2</a>
-            <a class="dropdown-item" href="#">Tableau 3</a>
-          </div>
-        </li>
-        <li></li>
-      </ul>
-      <div class="form-inline my-2 my-lg-0">
-        <a class="nav-link" href="/logout">Deconnexion<span class="sr-only">(current)</span></a>
-      </div>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+
+            <li class="nav-item">
+                <a class="nav-link" href="/users">Liste des utilisateurs</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                    Mes tableaux
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="#">Tableau 1</a>
+                    <a class="dropdown-item" href="#">Tableau 2</a>
+                    <a class="dropdown-item" href="#">Tableau 3</a>
+                </div>
+            </li>
+            <li></li>
+        </ul>
+
+        <div class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+                <% if(locals.login) {
+                    %> <%= locals.login %> <%
+                }
+                else {
+                    %> mode invité <%
+                }
+                %>
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                <a class="nav-link" href="/logout">Changer de compte<span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="/logout">Deconnexion<span class="sr-only">(current)</span></a>
+            </div>
+
+
+        </div>
     </div>
-  </nav>
+</nav>
