@@ -107,7 +107,10 @@ app.post('/changeBoard', (req, res) => {
 					res.status(500).send({error: 'une erreur est survenue !'}); 
 				}
 				else {
-					res.send(board.notes);
+					queries.getAllUsers().then(allUsers => {
+						res.send({board: board, users: allUsers, currentUser: ssn.login});
+					});
+					//res.send(board);
 				}
 			});
 		}
