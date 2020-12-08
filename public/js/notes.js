@@ -104,7 +104,8 @@ $(document).ready(function() {
     }));
 
     // ajout d'un utilisateur au tableau
-    $(".dropdown-menu").on("click", ".outside .dropdown-item", (function() {
+    $("#listUsers").on("click", ".outside .dropdown-item", (function() {
+        console.log("mdr");
         var type = this.parentNode;
         var icon = this.children[1];
 
@@ -210,14 +211,14 @@ $(document).ready(function() {
                 }
 
                 // chargement de la liste des utilisateurs
-                $(".dropdown-menu").empty();
+                $("#listUsers").empty();
                 for(let user of response.users) {
                     if(user.login != response.currentUser) {
                         if (response.board.users.some(e => e.name === user.login)) {
-                            $(".dropdown-menu").append(userElement(user._id, user.login, "inside"));
+                            $("#listUsers").append(userElement(user._id, user.login, "inside"));
                         }
                         else {
-                            $(".dropdown-menu").append(userElement(user._id, user.login, "outside"));
+                            $("#listUsers").append(userElement(user._id, user.login, "outside"));
                         }
                     }
                 }
