@@ -71,17 +71,19 @@ app.post('/register', (req, res) => {
 
 app.get('/notes', isAuthenticated, (req, res) => {
 	try {
-		queries.findAllBoardsByUserId(ssn.login, ssn.password).then(allBoards => {
-			if(allBoards != null) {
-				res.render('notes', {notes: allBoards[0].notes, boards: allBoards});
-			}
-			else {
-				queries.addBoard(ssn.login, ssn.password, "Tableau n°1");
-				queries.findBoardByUserId(ssn.login, ssn.password).then(newBoard => {
-					var newBoards = [newBoard];
-					res.render('notes', {notes: newBoard.notes[0], boards: newBoards});
-				});
-			}
+		queries.getAllUsers().then(allUsers => {
+			queries.findAllBoardsByUserId(ssn.login, ssn.password).then(allBoards => {
+				if(allBoards != null) {
+					res.render('notes', {notes: allBoards[0].notes, boards: allBoards, users: allUsers});
+				}
+				else {
+					queries.addBoard(ssn.login, ssn.password, "Tableau n°1");
+					queries.findBoardByUserId(ssn.login, ssn.password).then(newBoard => {
+						var newBoards = [newBoard];
+						res.render('notes', {notes: newBoard.notes[0], boards: newBoards, users: allUsers});
+					});
+				}
+			})
 		})
 	}
 	catch(e) {
@@ -133,12 +135,22 @@ app.put('/saveNote', (req, res) => {
 	}
 });
 
+
 app.put('/addNote', (req, res) => {
 	queries.findBoardById(req.body.boardId).then(board => {
 		var newNote = queries.addNote(board, "new note");
 		res.send(newNote);
 	});
 });
+
+app.put('/addUser', (req, res) => {
+	console.log(req.body.name);
+	queries.findBoardById(req.body.boardId).then(board => {
+		
+	})
+	res.send("success");
+});
+
 
 app.put('/addBoard', (req, res) => {
 	queries.addBoard(ssn.login, ssn.password, req.body.boardName).then(newBoard => {

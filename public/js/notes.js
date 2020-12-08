@@ -65,7 +65,7 @@ $(document).ready(function() {
 
 
     // suppression d'une note
-    $('.notes ul').on('click', 'li button', (function() {
+    $('.notes ul').on('click', 'li .deleteNote', (function() {
         var data = {};
         data._id = this.parentNode.firstElementChild.id;
         data.boardId = $('#listBoards').val();
@@ -84,8 +84,22 @@ $(document).ready(function() {
     }));
 
     // ajout d'un utilisateur au tableau
-    $("#addUsers").click(function() {
-        console.log("test");
+    $(".dropdown-item").click(function() {
+        //console.log($(this).find(">:first-child").html());
+        //console.log($(this).html().first());
+        var data = {};
+        data._id = this.id;
+        data.name = $(this).find(">:first-child").html();
+        data.boardId = $('#listBoards').html();
+        $.ajax({
+            type : "PUT",
+            url : "addUser",
+            data: JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",
+            success : function(newUser) {
+                
+            },
+        });
     });
 
     // ajout d'un tableau
@@ -153,7 +167,7 @@ $(document).ready(function() {
     // fonction d'une note du tableau
     function noteElement(id, text) {
         var note = '<li><p maxlength="30" contentEditable="true" id=' + id + '>' + text 
-        + '</p><button class="deleteNote"><img width="13" height="13" src ="/img/ColorWheel.png"/></button>' 
+        + '</p><button class="chooseColor"><img width="13" height="13" src ="/img/ColorWheel.png"/></button>' 
         + '<button class="deleteNote">✘</button></li>';
         return note;
     }

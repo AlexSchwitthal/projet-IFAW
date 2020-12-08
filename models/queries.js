@@ -158,6 +158,15 @@ module.exports = {
             }
         );
         board.save();
-    }
+    },
+
+    addUserToBoard: function(board, userId) {
+        var newUser = {
+            _id : mongoose.Types.ObjectId(userId)
+        }
+        board.users.push(newNote);
+        board.save();
+        return newUser;
+    },
 };
   
