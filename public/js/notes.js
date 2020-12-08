@@ -201,10 +201,25 @@ $(document).ready(function() {
             url : "changeBoard",
             data: JSON.stringify(data),
             contentType: "application/json; charset=utf-8",
-            success : function(currentBoard) {
+            success : function(response) {
+
+                // chargement des nouvelles notes
                 $(".notes > ul").empty();
-                for(let note of currentBoard) {
+                for(let note of response.board.notes) {
                     $(".notes > ul").append(noteElement(note._id, note.text));
+                }
+
+                // chargement de la liste des utilisateurs
+                $(".dropdown-menu").empty();
+                for(let user of response.users) {
+                    if(user.login != response.currentUser) {
+                        if (response.board.users.some(e => e.name === user.login)) {
+                            $(".dropdown-menu").append(userElement(user._id, user.login, "inside"));
+                        }
+                        else {
+                            $(".dropdown-menu").append(userElement(user._id, user.login, "outside"));
+                        }
+                    }
                 }
             },
             error: function () {
@@ -213,12 +228,29 @@ $(document).ready(function() {
         });
     }
 
+
     // fonction d'une note du tableau
     function noteElement(id, text) {
         var note = '<li><p maxlength="30" contentEditable="true" id=' + id + '>' + text 
         + '</p><button class="chooseColor"><img width="13" height="13" src ="/img/ColorWheel.png"/></button>' 
         + '<button class="deleteNote">✘</button></li>';
         return note;
+    }
+
+    function userElement(id, userName, type) {
+        var marginRight = 0;
+        var icon = "plus";
+        if(type == "inside") {
+            marginRight = 1;
+            icon = "times";
+        }
+        var user =  "<div class=" + type + ">" +
+                        "<div class='dropdown-item' style='margin-right:75px' id=" + id + ">" + 
+                            "<span>" + userName + "</span>" +
+                            "<span class='fas fa-" + icon + " float-right style='margin-top:5px; margin-right:" + marginRight + ";'></span>" +
+                        "</div>" +
+                "</div>";
+        return user;
     }
 });
 
