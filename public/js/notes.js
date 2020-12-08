@@ -105,7 +105,6 @@ $(document).ready(function() {
 
     // ajout d'un utilisateur au tableau
     $("#listUsers").on("click", ".outside .dropdown-item", (function() {
-        console.log("mdr");
         var type = this.parentNode;
         var icon = this.children[1];
 
