@@ -104,13 +104,13 @@ $(document).ready(function() {
     }));
 
     // ajout d'un utilisateur au tableau
-    $(".dropdown-item .fa-plus").click(function() {
-        var type = this.parentNode.parentNode;
-        var icon = this;
+    $(".dropdown-menu").on("click", ".outside .dropdown-item", (function() {
+        var type = this.parentNode;
+        var icon = this.children[1];
 
         var data = {};
-        data._id = this.parentNode.id;
-        data.name = $(this.parentNode).find(">:first-child").html();
+        data._id = this.id;
+        data.name = this.firstElementChild.innerHTML;
         data.boardId = $('#listBoards').val();
         $.ajax({
             type : "PUT",
@@ -125,16 +125,16 @@ $(document).ready(function() {
                 icon.style.marginRight = "1px";
             },
         });
-    });
+    }));
 
     // suppression d'un utilisateur au tableau
-    $(".dropdown-item .fa-times").click(function() {
-        var type = this.parentNode.parentNode;
-        var icon = this;
+    $(".dropdown-menu").on("click", ".inside .dropdown-item", (function() {
+        var type = this.parentNode;
+        var icon = this.children[1];
         
         var data = {};
-        data._id = this.parentNode.id;
-        data.name = $(this.parentNode).find(">:first-child").html();
+        data._id = this.id;
+        data.name = this.firstElementChild.innerHTML;
         data.boardId = $('#listBoards').val();
         $.ajax({
             type : "DELETE",
@@ -149,7 +149,7 @@ $(document).ready(function() {
                 icon.style.marginRight = "0px";
             },
         });
-    });
+    }));
 
     // ajout d'un tableau
     $("#addBoard").click(function() {
