@@ -66,19 +66,8 @@ module.exports = {
         }
     },
 
-    findAllBoardsByUserId: async function(login, password) {
-        try {
-            const currentUser = await this.getSpecificUser(login, password);
-            return boards.find({ creator_id: currentUser._id }, (error, board) => {
-                if (error)
-                    return console.error(error);
-                return board;
-            });
-        }
-        catch(err) {
-            console.log(err);
-        }
-
+    findAllBoardsByUser: async function(login) {
+        return boards.find().or([{ "users.name": login }, {creator_name: login}]);
     },
 
     addBoard: async function(login, password, boardName) {
@@ -181,13 +170,41 @@ module.exports = {
         board.save();
     },
 
-    addUserToBoard: function(board, userId) {
-        var newUser = {
-            _id : mongoose.Types.ObjectId(userId)
-        }
-        board.users.push(newNote);
+    removeUserFromBoard: function(board, userId) {
+        boards.updateOne(
+            {
+                _id: mongoose.Types.ObjectId(board._id)
+            }, 
+            {
+                $pull: 
+                {
+                    users: 
+                    {
+                        _id: mongoose.Types.ObjectId(userId)
+                    }
+                }
+            }, 
+            function(err){
+                if(err) return err;
+            }
+        );
         board.save();
-        return newUser;
+    },
+
+
+    addUserToBoard: function(board, userId, userName) {
+        if (board.users.some(e => e.name === userName)) {
+            return "error";
+        }
+        else {
+            var newUser = {
+                _id : mongoose.Types.ObjectId(userId),
+                name : userName
+            }
+            board.users.push(newUser);
+            board.save();
+            return newUser;
+        }
     },
 };
   

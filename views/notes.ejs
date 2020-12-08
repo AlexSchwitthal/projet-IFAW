@@ -29,12 +29,27 @@
                 <%
                 for(let user of users) {
                     if(user.login != locals.login) {
-                    %> 
-                        <div class="dropdown-item" style="margin-right:75px" id="<%= user._id %>">
-                            <span><%= user.login %></span>
-                            <span class="fas fa-plus float-right" style="margin-top:5px"></span>
-                        </div>  
-                    <%
+
+                        if (board.users.some(e => e.name === user.login)) {
+                            %> 
+                            <div class="inside">
+                                <div class="dropdown-item" style="margin-right:75px" id="<%= user._id %>">
+                                    <span><%= user.login %></span>
+                                    <span class="fas fa-times float-right" style="margin-top:5px; margin-right:1px;"></span>
+                                </div>
+                            </div>
+                            <%
+                        }
+                        else {
+                            %> 
+                            <div class="outside">
+                                <div class="dropdown-item" style="margin-right:75px" id="<%= user._id %>">
+                                    <span><%= user.login %></span>
+                                    <span class="fas fa-plus float-right" style="margin-top:5px"></span>
+                                </div> 
+                            </div> 
+                            <%
+                        }
                     }
                 }
                 %> 

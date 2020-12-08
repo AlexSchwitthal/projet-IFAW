@@ -83,3 +83,11 @@
 #addUsers {
     margin-left:15px;
 }
+
+.inside .dropdown-item {
+    background-color: #ff726f !important;
+}
+
+.outside .dropdown-item {
+    background-color: lightgreen !important;
+}

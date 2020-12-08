@@ -72,15 +72,15 @@ app.post('/register', (req, res) => {
 app.get('/notes', isAuthenticated, (req, res) => {
 	try {
 		queries.getAllUsers().then(allUsers => {
-			queries.findAllBoardsByUserId(ssn.login, ssn.password).then(allBoards => {
+			queries.findAllBoardsByUser(ssn.login).then(allBoards => {
 				if(allBoards != null) {
-					res.render('notes', {notes: allBoards[0].notes, boards: allBoards, users: allUsers});
+					res.render('notes', {board: allBoards[0], boards: allBoards, users: allUsers});
 				}
 				else {
 					queries.addBoard(ssn.login, ssn.password, "Tableau n°1");
 					queries.findBoardByUserId(ssn.login, ssn.password).then(newBoard => {
 						var newBoards = [newBoard];
-						res.render('notes', {notes: newBoard.notes[0], boards: newBoards, users: allUsers});
+						res.render('notes', {board: newBoard[0], boards: newBoards, users: allUsers});
 					});
 				}
 			})
@@ -90,7 +90,6 @@ app.get('/notes', isAuthenticated, (req, res) => {
 		res.redirect("/users");
 	}
 });
-
 
 app.get('/users', isAuthenticated, (req, res) => {
 	queries.getAllUsers().then(allUsers => {
@@ -144,13 +143,19 @@ app.put('/addNote', (req, res) => {
 });
 
 app.put('/addUser', (req, res) => {
-	console.log(req.body.name);
 	queries.findBoardById(req.body.boardId).then(board => {
-		
+		queries.addUserToBoard(board, req.body._id, req.body.name);
+		res.send("success");
 	})
-	res.send("success");
+
 });
 
+app.delete('/removeUser', (req, res) => {
+	queries.findBoardById(req.body.boardId).then(board => {
+		queries.removeUserFromBoard(board, req.body._id);
+		res.send("success");
+	})
+});
 
 app.put('/addBoard', (req, res) => {
 	queries.addBoard(ssn.login, ssn.password, req.body.boardName).then(newBoard => {
