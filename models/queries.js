@@ -132,16 +132,7 @@ module.exports = {
         boards.updateOne(
             {
                 _id: mongoose.Types.ObjectId(board._id)
-            }, 
-            {
-                $pull: 
-                {
-                    notes: 
-                    {
-                        _id: mongoose.Types.ObjectId(noteId)
-                    }
-                }
-            }, 
+            },            
             function(err){
                 if(err) return err;
             }
