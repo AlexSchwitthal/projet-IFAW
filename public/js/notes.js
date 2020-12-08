@@ -4,12 +4,12 @@ $(document).ready(function() {
     var spanCloseModal = document.getElementById("closeModal");
     changeBoard($('#listBoards').val());
 
-     setInterval(function() { 
+/*      setInterval(function() { 
         if(!isTyping) {
             changeBoard($('#listBoards').val());
         }
     }, 5000);
-
+ */
     // ajout d'une note
     $("#addNote").click(function() {
         var data = {};
@@ -21,7 +21,7 @@ $(document).ready(function() {
             data: JSON.stringify(data),
             contentType: "application/json; charset=utf-8",
             success : function(newNote) {
-                $(".notes > ul").append(noteElement(newNote._id, newNote.text));
+                $(".notes > ul").append(noteElement(newNote._id, newNote.text, newNote.color));
             }
         });
     });
@@ -73,50 +73,50 @@ $(document).ready(function() {
         data._id = this.parentNode.firstElementChild.id;
         data.boardId = $('#listBoards').val();
         var element = this;
-        $.ajax({
-            type : "PUT",
-            url : "chooseColor",
-            data: JSON.stringify(data),
-            contentType: "application/json; charset=utf-8",            
-            success : function(result) {
-                if (result == "success") {
-                    modal.style.display = "block";
-                    let colorList = document.getElementById("colorList");
-                    let green = document.getElementById("colorGreen");
-                    let blue = document.getElementById("colorBlue");
-                    let yellow = document.getElementById("colorYellow");
-                    let orange = document.getElementById("colorOrange");
-                    let red = document.getElementById("colorRed");
-                    window.onclick = function(event) {
-                        if (event.target == green) {    
-                            modal.style.display = "none";                        
-                            element.parentNode.style.backgroundColor = "#86f789";
-                            data.color = "#86f789";                            
-                        }
-                        if (event.target == blue) { 
-                            modal.style.display = "none";                           
-                            element.parentNode.style.backgroundColor = "#6bbcf2";
-                            data.color = "#6bbcf2"; 
-                        }
-                        if (event.target == yellow) {
-                            modal.style.display = "none";
-                            element.parentNode.style.backgroundColor = "#f6ff7a";
-                            data.color = "#f6ff7a"; 
-                        }
-                        if (event.target == orange) {
-                            modal.style.display = "none";
-                            element.parentNode.style.backgroundColor = "#f5af5b";
-                            data.color = "#f5af5b"; 
-                        }
-                        if (event.target == red) {
-                            modal.style.display = "none";
-                            element.parentNode.style.backgroundColor = "#f26b6b";
-                            data.color = "#f26b6b"; 
-                        }
-                    }                    
-                }
+        modal.style.display = "block";
+        let green = document.getElementById("colorGreen");
+        let blue = document.getElementById("colorBlue");
+        let yellow = document.getElementById("colorYellow");
+        let orange = document.getElementById("colorOrange");
+        let red = document.getElementById("colorRed");
+        window.onclick = function(event) {
+            if (event.target == green) {    
+                modal.style.display = "none";                        
+                element.parentNode.style.backgroundColor = "#86f789";
+                data.color = "#86f789";                            
             }
-        });
+            if (event.target == blue) { 
+                modal.style.display = "none";                           
+                element.parentNode.style.backgroundColor = "#6bbcf2";
+                data.color = "#6bbcf2"; 
+            }
+            if (event.target == yellow) {
+                modal.style.display = "none";
+                element.parentNode.style.backgroundColor = "#f6ff7a";
+                data.color = "#f6ff7a"; 
+            }
+            if (event.target == orange) {
+                modal.style.display = "none";
+                element.parentNode.style.backgroundColor = "#f5af5b";
+                data.color = "#f5af5b"; 
+            }
+            if (event.target == red) {
+                modal.style.display = "none";
+                element.parentNode.style.backgroundColor = "#f26b6b";
+                data.color = "#f26b6b"; 
+                $.ajax({
+                    type : "PUT",
+                    url : "chooseColor",
+                    data: JSON.stringify(data),
+                    contentType: "application/json; charset=utf-8",            
+                    success : function(result) {
+                        if (result == "success") {
+                            
+                        }                    
+                    }
+                });
+            }     
+        }   
     }));
 
 
@@ -253,7 +253,7 @@ $(document).ready(function() {
                 // chargement des nouvelles notes
                 $(".notes > ul").empty();
                 for(let note of response.board.notes) {
-                    $(".notes > ul").append(noteElement(note._id, note.text));
+                    $(".notes > ul").append(noteElement(note._id, note.text, note.color));
                 }
 
                 // chargement de la liste des utilisateurs
@@ -277,8 +277,8 @@ $(document).ready(function() {
 
 
     // fonction d'une note du tableau
-    function noteElement(id, text) {
-        var note = '<li><p maxlength="30" contentEditable="true" id=' + id + '>' + text 
+    function noteElement(id, text, color) {
+        var note = '<li style="background-color:' +color +'"><p maxlength="30" contentEditable="true" id=' + id + '>' + text 
         + '</p><button class="chooseColor"><img width="13" height="13" src ="/img/ColorWheel.png"/></button>' 
         + '<button class="deleteNote">✘</button></li>';
         return note;

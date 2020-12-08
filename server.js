@@ -152,7 +152,7 @@ app.put('/saveNote', (req, res) => {
 
 app.put('/addNote', (req, res) => {
 	queries.findBoardById(req.body.boardId).then(board => {
-		var newNote = queries.addNote(board, "new note");
+		var newNote = queries.addNote(board, "new note", req.body.color);
 		res.send(newNote);
 	});
 });
@@ -185,7 +185,8 @@ app.put('/addBoard', (req, res) => {
 
 app.put('/chooseColor', (req, res) => {
 	queries.findBoardById(req.body.boardId).then(board => {
-		queries.chooseColor(board, req.body._id);
+		console.log(req.body.color);
+		queries.chooseColor(board, req.body._id, req.body.color);
 		res.send("success");
 	})
 });

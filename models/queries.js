@@ -93,10 +93,11 @@ module.exports = {
         return newBoard;
     },
 
-    addNote: function(board, text) {
+    addNote: function(board, text, color) {
         var newNote = {
             _id : mongoose.Types.ObjectId(),
-            text: text
+            text: text,
+            color: color
         }
         board.notes.push(newNote);
         board.save();
@@ -128,11 +129,18 @@ module.exports = {
         board.save();
     },
 
-    chooseColor: function(board, noteId){
+    chooseColor: function(board, noteId, color){
         boards.updateOne(
             {
-                _id: mongoose.Types.ObjectId(board._id)
-            },            
+                _id: mongoose.Types.ObjectId(board._id),
+                "notes._id": mongoose.Types.ObjectId(noteId)  
+            },  
+            { 
+                "$set": 
+                { 
+                   "notes.$.color": color
+                }
+            },           
             function(err){
                 if(err) return err;
             }
