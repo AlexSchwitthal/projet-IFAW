@@ -41,6 +41,7 @@
     font-family:"Reenie Beanie",arial,sans-serif;
     font-size:180%;
 }
+
 .notes ul li:nth-child(even) {
     -o-transform:rotate(4deg);
     -webkit-transform:rotate(4deg);
