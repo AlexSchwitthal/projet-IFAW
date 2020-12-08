@@ -166,6 +166,13 @@ app.put('/addBoard', (req, res) => {
 	});
 });
 
+app.put('/chooseColor', (req, res) => {
+	queries.findBoardById(req.body.boardId).then(board => {
+		queries.chooseColor(board, req.body._id);
+		res.send("success");
+	})
+});
+
 app.delete('/deleteNote', (req, res) => {
 	queries.findBoardById(req.body.boardId).then(board => {
 		queries.deleteNote(board, req.body._id);

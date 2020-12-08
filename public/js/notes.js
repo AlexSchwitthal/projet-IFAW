@@ -64,8 +64,28 @@ $(document).ready(function() {
     })); 
 
 
+    // choix de la couleur d'une note
+    $('.notes ul').on('click', 'li .chooseColor', (function() {        
+        var data = {};
+        data._id = this.parentNode.firstElementChild.id;
+        data.boardId = $('#listBoards').val();
+        var element = this;
+        $.ajax({
+            type : "PUT",
+            url : "chooseColor",
+            data: JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",            
+            success : function(result) {
+                if (result == "success") {
+                    
+                    element.parentNode.style.backgroundColor = "#00FF00";
+                }
+            }
+        });
+    }));
+
     // suppression d'une note
-    $('.notes ul').on('click', 'li .deleteNote', (function() {
+    $('.notes ul').on('click', 'li .deleteNote', (function() {        
         var data = {};
         data._id = this.parentNode.firstElementChild.id;
         data.boardId = $('#listBoards').val();
