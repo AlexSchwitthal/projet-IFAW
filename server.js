@@ -121,7 +121,11 @@ app.put('/saveNote', (req, res) => {
 		if(req.body._id != "") {
 			queries.findBoardById(req.body.boardId).then(board => {
 				queries.editNote(board, req.body._id, req.body.text);
+				res.send("success");
 			})
+		}
+		else {
+			res.status(500).send({error: 'une erreur est survenue !'}); 
 		}
 	}
 	catch(err) {

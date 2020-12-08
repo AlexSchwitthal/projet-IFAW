@@ -1,5 +1,12 @@
 $(document).ready(function() {
+    var isTyping = false;
     changeBoard($('#listBoards').val());
+
+     setInterval(function() { 
+        if(!isTyping) {
+            changeBoard($('#listBoards').val());
+        }
+    }, 5000);
 
     // ajout d'une note
     $("#addNote").click(function() {
@@ -16,8 +23,8 @@ $(document).ready(function() {
         });
     });
 
-    // sauvegarde d'une note
-    $('ul').on('focusout', 'li p', (function() {
+    // deprecated
+/*     $('ul').on('focusout', 'li p', (function() {
         var data = {};
         data._id = this.id;
         data.text = $(this).html();
@@ -28,7 +35,34 @@ $(document).ready(function() {
             data: JSON.stringify(data),
             contentType: "application/json; charset=utf-8"
         });
-    }));
+    })); */
+
+    // sauvegarde d'une note dès que l'on arrête d'écrire pendant plus d'1 seconde
+     var searchTimeout;
+    $('ul').on('keyup', 'li p', (function() {
+        isTyping = true;
+        var text = $(this).html();
+        var id = this.id;
+        if (searchTimeout != undefined) clearTimeout(searchTimeout);
+        var data = {};
+        data._id = id;
+        data.text = text;
+        data.boardId = $('#listBoards').val();
+        $.ajax({
+            type : "PUT",
+            url : "saveNote",
+            data: JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",
+            error: function () {
+                console.log("erreur");
+            },
+            timeout: 2000
+        });
+        searchTimeout = setTimeout(function() {
+            isTyping = false;
+        }, 2000);
+    })); 
+
 
     // suppression d'une note
     $('.notes ul').on('click', 'li button', (function() {
@@ -57,6 +91,7 @@ $(document).ready(function() {
     // ajout d'un tableau
     $("#addBoard").click(function() {
         var boardName = window.prompt("veuillez saisir un nom pour votre nouveau tableau : ", "");
+        boardName = boardName.split("").join("");
         if(boardName != "") {
             var data = {};
             data.boardName = boardName;
@@ -66,7 +101,11 @@ $(document).ready(function() {
                 data: JSON.stringify(data),
                 contentType: "application/json; charset=utf-8",
                 success : function(newBoard) {
-                    //$(".notes > ul").append('<li><p contentEditable="true" id=' + newNote._id +'>' + newNote.text + '</p><button class="deleteNote">✘</button></li>');
+                    // ajout du nouveau tableau à la liste des tableaux;
+                    var o = new Option(newBoard.name, newBoard._id);
+                    $(o).html(newBoard.name);
+                    $("#listBoards").append(o).prop('selected', true);
+                    alert("le nouveau tableau a bien été créé !");
                 },
                 error: function () {
                     alert("erreur ! vous disposez déjà d'un tableau avec ce nom !");
@@ -90,15 +129,6 @@ $(document).ready(function() {
         changeBoard(boardId);
     });
 
-
-    // fonction d'une note du tableau
-    function noteElement(id, text) {
-        var note = '<li><p contentEditable="true" id=' + id + '>' + text 
-        + '</p><button class="deleteNote"><img width="13" height="13" src ="/img/ColorWheel.png"/></button>' 
-        + '<button class="deleteNote">✘</button></li>';
-        return note;
-    }
-
     // fonction de chargement de tableau
     function changeBoard(boardId) {
         var data = {};
@@ -118,6 +148,14 @@ $(document).ready(function() {
                 alert("une erreur est survenue lors du changement de tableau");
             },
         });
+    }
+
+    // fonction d'une note du tableau
+    function noteElement(id, text) {
+        var note = '<li><p maxlength="30" contentEditable="true" id=' + id + '>' + text 
+        + '</p><button class="deleteNote"><img width="13" height="13" src ="/img/ColorWheel.png"/></button>' 
+        + '<button class="deleteNote">✘</button></li>';
+        return note;
     }
 });
 
