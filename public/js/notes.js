@@ -84,19 +84,41 @@ $(document).ready(function() {
     }));
 
     // ajout d'un utilisateur au tableau
-    $(".dropdown-item").click(function() {
-        //console.log($(this).find(">:first-child").html());
-        //console.log($(this).html().first());
+    $(".dropdown-item .fa-plus").click(function() {
+        var type = this.parentNode.parentNode;
+        var icon = this;
+
         var data = {};
-        data._id = this.id;
-        data.name = $(this).find(">:first-child").html();
-        data.boardId = $('#listBoards').html();
+        data._id = this.parentNode.id;
+        data.name = $(this.parentNode).find(">:first-child").html();
+        data.boardId = $('#listBoards').val();
         $.ajax({
             type : "PUT",
             url : "addUser",
             data: JSON.stringify(data),
             contentType: "application/json; charset=utf-8",
-            success : function(newUser) {
+            success : function() {
+                type.classList.remove("outside");
+                type.classList.add("inside");
+                icon.classList.remove("fa-plus");
+                icon.classList.add("fa-times");
+                icon.style.marginRight = "1px";
+            },
+        });
+    });
+
+    // suppression d'un utilisateur au tableau
+    $(".dropdown-item .fa-times").click(function() {
+        var data = {};
+        data._id = this.parentNode.id;
+        data.name = $(this.parentNode).find(">:first-child").html();
+        data.boardId = $('#listBoards').val();
+        $.ajax({
+            type : "DELETE",
+            url : "removeUser",
+            data: JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",
+            success : function(oldUser) {
                 
             },
         });
