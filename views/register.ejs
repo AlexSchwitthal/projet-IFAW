@@ -1,36 +1,49 @@
 <!doctype html>
 <html lang="fr">
+
 <head>
-  <meta charset="utf-8">
-  <title>Titre de la page</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css">
+    <meta charset="utf-8">
+    <title>Inscription</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/register.css">
 </head>
 
 <body>
     <div class="container">
-        <%- include('header'); %>
-        <h1>Inscription</h1>
-        <br>
-        <form action="register" method="post">
-            <div class="form-group">
-                <div>
-                    <label for="validationFormulaire">Nom d'utilisateur :</label>
-                    <input type="text" id="username" name="username" class="form-control" maxlength="15" required>
-                    <br />
-                </div>
-                <div>
-                    <label for="mdp">Mot de passe :</label>
-                    <input type="password" id="password" name="password" class="form-control" maxlength="15" required>
-                    <br />
-                </div>
-                <hr>
-                <div>
-                    <input type="submit" value="Valider" class="btn btn-primary">
-
-                    <input type="reset" value="Effacer" class="btn btn-danger">
+        <!-- <%- include('header'); %> -->
+        <div class="card o-hidden border-0 shadow-lg my-5">
+            <div class="card-body p-0">
+                <div class="row">
+                    <div class="col-lg-5 d-none d-lg-block bg-logo-image"></div>
+                    <div class="col-lg-7">
+                        <div class="p-5">
+                            <div class="text-center">
+                                <h1 class="h4 text-gray-900 mb-4">Création du compte !</h1>
+                            </div>
+                            <form action="register" method="post">
+                                <div class="form-group">
+                                    <input type="text" id="username" name="username"
+                                        class="form-control  form-control-user" maxlength="15"
+                                        placeholder="Nom d'utilisateur" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="password" id="password" name="password"
+                                        class="form-control  form-control-user" maxlength="15"
+                                        placeholder="Mot de passe" required>
+                                </div>
+                                <input type="submit" value="Valider" class="btn btn-primary btn-user btn-block">
+                                <input type="reset" value="Effacer" class="btn btn-danger btn-user btn-block">
+                            </form>
+                            <hr>
+                            <div class="text-center">
+                                <a class="small" href="/login">Tu as déjà un compte ? Identifies toi !</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </form>
+        </div>
     </div>
 </body>
+
 </html>

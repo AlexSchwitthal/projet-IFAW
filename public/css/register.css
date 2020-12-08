@@ -1,0 +1,5 @@
+.bg-logo-image {
+    background-image: url(/img/postjs.png);
+    background-position: center;
+    background-size: cover;
+  }
