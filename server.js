@@ -69,12 +69,21 @@ app.post('/register', (req, res) => {
 });
 
 
-app.get('/notes', isAuthenticated, (req, res) => {
+app.get('/notes/', isAuthenticated, (req, res) => {
 	try {
 		queries.getAllUsers().then(allUsers => {
 			queries.findAllBoardsByUser(ssn.login).then(allBoards => {
 				if(allBoards != null) {
-					res.render('notes', {board: allBoards[0], boards: allBoards, users: allUsers});
+					if(req.query.board) {
+						for(var board of allBoards) {
+							if(board._id == req.query.board) {
+								res.render('notes', {board: board, boards: allBoards, users: allUsers});
+							}
+						}
+					}
+					else {
+						res.render('notes', {board: allBoards[0], boards: allBoards, users: allUsers});
+					}
 				}
 				else {
 					queries.addBoard(ssn.login, ssn.password, "Tableau n°1");
@@ -87,15 +96,19 @@ app.get('/notes', isAuthenticated, (req, res) => {
 		})
 	}
 	catch(e) {
+		console.log(e);
 		res.redirect("/users");
 	}
 });
 
+
 app.get('/users', isAuthenticated, (req, res) => {
-	queries.getAllUsers().then(allUsers => {
-		res.render('users', {users: allUsers});
-	}).catch(err => res.render('users'));
-})
+	queries.findAllBoardsByUser(ssn.login).then(allBoards => {
+		queries.getAllUsers().then(allUsers => {
+			res.render('users', {users: allUsers, boards : allBoards});
+		}).catch(err => res.render('users'));
+	})
+});
 
 
 // DEBUT APPEL AJAX
@@ -110,7 +123,6 @@ app.post('/changeBoard', (req, res) => {
 					queries.getAllUsers().then(allUsers => {
 						res.send({board: board, users: allUsers, currentUser: ssn.login});
 					});
-					//res.send(board);
 				}
 			});
 		}

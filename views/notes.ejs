@@ -33,10 +33,14 @@
         <span class="float-right">
             <select class="form-control" id="listBoards">
                 <%
-
                 if(boards) {
-                    for(let board of boards) {
-                        %> <option value="<%= board._id %>"><%= board.name %></option> <% 
+                    for(let element of boards) {
+                        if(board._id == element._id) {
+                            %> <option value="<%= element._id %>" selected><%= element.name %></option> <% 
+                        }
+                        else {
+                            %> <option value="<%= element._id %>"><%= element.name %></option> <% 
+                        }
                     }
                 }
                 %> 
