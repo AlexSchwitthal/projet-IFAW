@@ -26,10 +26,14 @@ app.use(function(req, res, next) {
 });
 
 
+
 app.get('/', (req, res) => {
 	res.redirect('login');
 });
 
+app.get('/test', (req, res) => {
+	res.render('test');
+});
 
 app.get('/login', isNotAuthenticated, (req, res) => {
 	res.render('login');
@@ -69,21 +73,12 @@ app.post('/register', (req, res) => {
 });
 
 
-app.get('/notes/', isAuthenticated, (req, res) => {
+app.get('/notes', isAuthenticated, (req, res) => {
 	try {
 		queries.getAllUsers().then(allUsers => {
 			queries.findAllBoardsByUser(ssn.login).then(allBoards => {
 				if(allBoards != null) {
-					if(req.query.board) {
-						for(var board of allBoards) {
-							if(board._id == req.query.board) {
-								res.render('notes', {board: board, boards: allBoards, users: allUsers});
-							}
-						}
-					}
-					else {
-						res.render('notes', {board: allBoards[0], boards: allBoards, users: allUsers});
-					}
+					res.render('notes', {board: allBoards[0], boards: allBoards, users: allUsers});
 				}
 				else {
 					queries.addBoard(ssn.login, ssn.password, "Tableau n°1");
@@ -96,19 +91,15 @@ app.get('/notes/', isAuthenticated, (req, res) => {
 		})
 	}
 	catch(e) {
-		console.log(e);
 		res.redirect("/users");
 	}
 });
 
-
 app.get('/users', isAuthenticated, (req, res) => {
-	queries.findAllBoardsByUser(ssn.login).then(allBoards => {
-		queries.getAllUsers().then(allUsers => {
-			res.render('users', {users: allUsers, boards : allBoards});
-		}).catch(err => res.render('users'));
-	})
-});
+	queries.getAllUsers().then(allUsers => {
+		res.render('users', {users: allUsers});
+	}).catch(err => res.render('users'));
+})
 
 
 // DEBUT APPEL AJAX
@@ -123,6 +114,7 @@ app.post('/changeBoard', (req, res) => {
 					queries.getAllUsers().then(allUsers => {
 						res.send({board: board, users: allUsers, currentUser: ssn.login});
 					});
+					//res.send(board);
 				}
 			});
 		}
@@ -149,10 +141,26 @@ app.put('/saveNote', (req, res) => {
 	}
 });
 
+app.put('/saveNotePosition', (req, res) => {
+	try {
+		if(req.body._id != "") {
+			queries.findBoardById(req.body.boardId).then(board => {
+				queries.editNotePosition(board, req.body._id, req.body.x, req.body.y);
+				res.send("success");
+			})
+		}
+		else {
+			res.status(500).send({error: 'une erreur est survenue !'}); 
+		}
+	}
+	catch(err) {
+		console.log(err);
+	}
+});
 
 app.put('/addNote', (req, res) => {
 	queries.findBoardById(req.body.boardId).then(board => {
-		var newNote = queries.addNote(board, "new note", req.body.color);
+		var newNote = queries.addNote(board, "new note", req.body.x, req.body.y);
 		res.send(newNote);
 	});
 });
@@ -185,7 +193,7 @@ app.put('/addBoard', (req, res) => {
 
 app.put('/chooseColor', (req, res) => {
 	queries.findBoardById(req.body.boardId).then(board => {
-		queries.chooseColor(board, req.body._id, req.body.color);
+		queries.chooseColor(board, req.body._id);
 		res.send("success");
 	})
 });
