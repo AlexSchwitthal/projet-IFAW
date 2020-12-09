@@ -145,14 +145,26 @@
     width: 80%;
   }
 
-  .modal-content h1{
-      position:absolute;
+  .modal-content h1{    
+    position:absolute;
   }
 
 .modal-content h1, #closeModal{
       display: inline-block;
   }
   
+  @media only screen and (max-width: 1700px) {
+    .modal{
+        padding-right:15em;
+        padding-left:15em;
+    
+    }
+    .modal-content h1, #closeModal{
+        position: relative;
+        font-size: 2em;
+        display: block;
+    }
+  }
   
   #closeModal { 
     
