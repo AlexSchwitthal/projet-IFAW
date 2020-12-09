@@ -185,7 +185,6 @@ app.put('/addBoard', (req, res) => {
 
 app.put('/chooseColor', (req, res) => {
 	queries.findBoardById(req.body.boardId).then(board => {
-		console.log(req.body.color);
 		queries.chooseColor(board, req.body._id, req.body.color);
 		res.send("success");
 	})

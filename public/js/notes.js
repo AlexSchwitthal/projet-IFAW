@@ -69,9 +69,8 @@ $(document).ready(function() {
 
     // choix de la couleur d'une note
     $('.notes ul').on('click', 'li .chooseColor', (function() {       
-        var data = {};
-        data._id = this.parentNode.firstElementChild.id;
-        data.boardId = $('#listBoards').val();
+        var _id = this.parentNode.firstElementChild.id;
+        var boardId = $('#listBoards').val();
         var element = this;
         modal.style.display = "block";
         let green = document.getElementById("colorGreen");
@@ -83,38 +82,27 @@ $(document).ready(function() {
             if (event.target == green) {    
                 modal.style.display = "none";                        
                 element.parentNode.style.backgroundColor = "#86f789";
-                data.color = "#86f789";                            
+                changeColor(_id, boardId, "#86f789");                          
             }
             if (event.target == blue) { 
                 modal.style.display = "none";                           
                 element.parentNode.style.backgroundColor = "#6bbcf2";
-                data.color = "#6bbcf2"; 
+                changeColor(_id, boardId, "#6bbcf2");
             }
             if (event.target == yellow) {
                 modal.style.display = "none";
                 element.parentNode.style.backgroundColor = "#f6ff7a";
-                data.color = "#f6ff7a"; 
+                changeColor(_id, boardId, "#f6ff7a");
             }
             if (event.target == orange) {
                 modal.style.display = "none";
                 element.parentNode.style.backgroundColor = "#f5af5b";
-                data.color = "#f5af5b"; 
+                changeColor(_id, boardId, "#f5af5b");
             }
             if (event.target == red) {
                 modal.style.display = "none";
                 element.parentNode.style.backgroundColor = "#f26b6b";
-                data.color = "#f26b6b"; 
-                $.ajax({
-                    type : "PUT",
-                    url : "chooseColor",
-                    data: JSON.stringify(data),
-                    contentType: "application/json; charset=utf-8",            
-                    success : function(result) {
-                        if (result == "success") {
-                            
-                        }                    
-                    }
-                });
+                changeColor(_id, boardId, "#f26b6b");
             }     
         }   
     }));
@@ -129,7 +117,6 @@ $(document).ready(function() {
           modal.style.display = "none";
         }
     }
-
 
     // suppression d'une note
     $('.notes ul').on('click', 'li .deleteNote', (function() {        
@@ -298,6 +285,24 @@ $(document).ready(function() {
                         "</div>" +
                 "</div>";
         return user;
+    }
+
+    function changeColor(_id, boardId, color) {
+        data = {};
+        data._id = _id;
+        data.boardId = boardId;
+        data.color = color;
+        $.ajax({
+            type : "PUT",
+            url : "chooseColor",
+            data: JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",            
+            success : function(result) {
+                if (result == "success") {
+                    
+                }                    
+            }
+        });
     }
     
     $("#searchBar").on({
