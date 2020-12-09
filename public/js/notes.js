@@ -1,34 +1,5 @@
 $(document).ready(function() {
     var isTyping = false;
-    var draggableOption = {
-        start: function( event, ui ) {
-            isTyping = true;
-        },
-        stop: function( event, ui ) {
-            //$("p", ui.helper).attr("id")
-            isTyping = false;
-            var id = this.id;
-            if (searchTimeout != undefined) clearTimeout(searchTimeout);
-            var data = {};
-            data._id = id;
-            data.x = ui.position.left;
-            data.y = ui.position.top;
-            data.boardId = $('#listBoards').val();
-            $.ajax({
-                type : "PUT",
-                url : "editNotePosition",
-                data: JSON.stringify(data),
-                contentType: "application/json; charset=utf-8",
-                error: function () {
-                    console.log("erreur");
-                },
-                timeout: 2000
-            });
-            searchTimeout = setTimeout(function() {
-                isTyping = false;
-            }, 2000);
-        },
-    };
     var modal = document.getElementById("modal1"); 
     var spanCloseModal = document.getElementById("closeModal");
     changeBoard($('#listBoards').val());
@@ -44,18 +15,13 @@ $(document).ready(function() {
         var data = {};
         data.boardId = $('#listBoards').val();
         data.color = "#f6ff7a";
-        data.x = 100;
-        data.y = 100;
         $.ajax({
             type : "PUT",
             url : "addNote",
             data: JSON.stringify(data),
             contentType: "application/json; charset=utf-8",
             success : function(newNote) {
-                var $noteElt = $(noteElement(newNote._id, newNote.text, newNote.color));
-                $(".notes > ul").append($noteElt);
-                $noteElt.draggable(draggableOption);
-                //$noteElt.draggable();
+                $(".notes > ul").append(noteElement(newNote._id, newNote.text, newNote.color));
             }
         });
     });
@@ -165,8 +131,7 @@ $(document).ready(function() {
             contentType: "application/json; charset=utf-8",
             success : function(result) {
                 if (result == "success") {
-                    //element.parentNode.remove();
-                    $(element.parentNode).addClass("hide-note");
+                    element.parentNode.remove();
                 }
             }
         });
@@ -275,10 +240,7 @@ $(document).ready(function() {
                 // chargement des nouvelles notes
                 $(".notes > ul").empty();
                 for(let note of response.board.notes) {
-                    var noteElt = $(noteElement(note._id, note.text, note.color));
-                    $(".notes > ul").append(noteElt);
-                    noteElt.draggable(draggableOption);
-                    //noteElt.draggable();
+                    $(".notes > ul").append(noteElement(note._id, note.text, note.color));
                 }
 
                 // chargement de la liste des utilisateurs
