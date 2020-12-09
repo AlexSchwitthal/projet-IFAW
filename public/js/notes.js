@@ -299,6 +299,27 @@ $(document).ready(function() {
                 "</div>";
         return user;
     }
+    
+    $("#searchBar").on({
+        keyup : function() {
+            var userInput = $(this).val();
+
+            $("#notesBoard").children().each(function() {
+                if ($(this).text().search(userInput) == -1) {
+                    $(this).css("display", "none");
+                }
+                else {
+                    $(this).css("display", "block");
+                }
+            })
+        },
+        click : function() {
+            $(this).val("");
+            $("#notesBoard").children().each(function() {
+                $(this).css("display", "block");
+            })
+        }
+    });
 });
 
 
