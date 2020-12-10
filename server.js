@@ -1,6 +1,7 @@
 const express = require("express");
 var session = require('express-session');
 const bodyParser = require('body-parser');
+//const cookieParser = require('cookie-parser');
 
 // initialisation de l'application et de la session
 const app = express();
@@ -13,6 +14,7 @@ const queries = require('./models/queries.js');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json()); 
+//app.use(cookieParser());
 app.use(express.static('public'));
 app.set('view engine', 'ejs');
 
@@ -21,6 +23,12 @@ app.use(function(req, res, next) {
 	if(ssn.login) {
 		res.locals.login = ssn.login;
 		res.locals.password = ssn.password;
+
+/* 		var cookie = req.cookies.login;
+		if (cookie === undefined) {
+		  	res.cookie('login', ssn.login, { maxAge: 900000, httpOnly: true });
+		  	res.cookie('nbConnexions', 0, { maxAge: 900000, httpOnly: true });
+		}  */
 	}
 	next();
 });
@@ -41,10 +49,11 @@ app.post('/login', (req, res) => {
 			ssn = req.session;
 			ssn.login = req.body.username;
 			ssn.password = req.body.password;
+			//res.cookie('nbConnexions', ++req.cookies.nbConnexions, { maxAge: 900000, httpOnly: true });
 			res.redirect('/notes');
 		}
 		else {
-			res.redirect('/login');
+			res.render('login', {erreur : "nom d'utilisateur ou mot de passe incorrect !"});
 		}
 	});
 });
@@ -60,8 +69,15 @@ app.get('/register', isNotAuthenticated, (req, res) => {
 
 app.post('/register', (req, res) => {
 	try {
-		queries.addUser(req.body.username.toLowerCase(), req.body.password);
-		res.redirect('/login');
+		queries.getSpecificUser(req.body.username, req.body.password).then(result => {
+			if(result == null) {
+				queries.addUser(req.body.username.toLowerCase(), req.body.password);
+				res.render('login', {success : "success"});
+			}
+			else {
+				res.render('register', {erreur : "nom d'utilisateurs déjà pris !"});
+			}
+		});
 	}
 	catch(e) {
 		res.redirect('/register');

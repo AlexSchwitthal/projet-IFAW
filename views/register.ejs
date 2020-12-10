@@ -19,6 +19,16 @@
                             <div class="text-center">
                                 <h1 class="h4 text-gray-900 mb-4">Création du compte !</h1>
                             </div>
+                            <% 
+                            if(locals.erreur) {
+                                %>
+                                <div class="alert alert-danger" role="alert">
+                                    <%= locals.erreur %>
+                                    <% delete locals.erreur %>
+                                </div>
+                                <%
+                            }
+                            %>
                             <form action="register" method="post">
                                 <div class="form-group">
                                     <input type="text" id="username" name="username"

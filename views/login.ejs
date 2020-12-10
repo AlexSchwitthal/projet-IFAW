@@ -21,6 +21,22 @@
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-4">Bon retour parmi nous !</h1>
                                     </div>
+                                    <% 
+                                    if(locals.erreur) {
+                                        %>
+                                        <div class="alert alert-danger" role="alert">
+                                            <%= locals.erreur %>
+                                        </div>
+                                        <%
+                                    }
+                                    else if(locals.success) {
+                                        %>
+                                        <div class="alert alert-success" role="alert">
+                                            <%= locals.success %>
+                                        </div>
+                                        <%
+                                    }
+                                    %> 
                                     <form action="login" method="post">
                                         <div class="form-group">
                                             <label for="validationFormulaire">Nom d'utilisateur :</label>
