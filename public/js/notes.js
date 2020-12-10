@@ -156,13 +156,12 @@ $(document).ready(function() {
                 type.classList.add("inside");
                 icon.classList.remove("fa-plus");
                 icon.classList.add("fa-times");
-                icon.style.marginRight = "1px";
             },
         });
     }));
 
     // suppression d'un utilisateur au tableau
-    $(".dropdown-menu").on("click", ".inside .dropdown-item", (function() {
+    $("#listUsers").on("click", ".inside .dropdown-item", (function() {
         var type = this.parentNode;
         var icon = this.children[1];
         
@@ -180,7 +179,6 @@ $(document).ready(function() {
                 type.classList.add("outside");
                 icon.classList.remove("fa-times");
                 icon.classList.add("fa-plus");
-                icon.style.marginRight = "0px";
             },
         });
     }));
@@ -272,16 +270,14 @@ $(document).ready(function() {
     }
 
     function userElement(id, userName, type) {
-        var marginRight = 0;
         var icon = "plus";
         if(type == "inside") {
-            marginRight = 1;
             icon = "times";
         }
         var user =  "<div class=" + type + ">" +
-                        "<div class='dropdown-item' style='margin-right:75px' id=" + id + ">" + 
+                        "<div class='dropdown-item' id=" + id + ">" + 
                             "<span>" + userName + "</span>" +
-                            "<span class='fas fa-" + icon + " float-right style='margin-top:5px; margin-right:" + marginRight + ";'></span>" +
+                            "<span class='fas fa-" + icon + " float-right'></span>" +
                         "</div>" +
                 "</div>";
         return user;
