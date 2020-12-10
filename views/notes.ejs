@@ -24,13 +24,13 @@
         <button type="button" id="addNote" class="btn btn-success">Ajouter une note</button>
         <button type="button" id="addBoard" class="btn btn-primary">Créer un nouveau tableau</button>
 
-        <span class="dropdown"></span>
+        <!-- <span class="dropdown"></span>
         <button class="btn btn-info dropdown-toggle float-right" type="button" data-toggle="dropdown" id="addUsers">
             Partager <i class="fas fa-plus-circle"></i>
         </button>
         <div class="dropdown-menu dropdown-menu-right" id="listUsers">
         </div>
-        </span>
+        </span> -->
 
         <span class="float-right">
             <select class="form-control" id="listBoards">
@@ -50,6 +50,44 @@
         </span>
 
 
+
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#listUsers">
+            Partager <i class="fas fa-plus-circle"></i>
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="listUsers" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Partager le tableau</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table">
+                            <thead>
+                              <tr>
+                                <th scope="col">Nom d'utilisateur</th>
+                                <th scope="col">Partagé</th>
+                              </tr>
+                            </thead>
+                            <tbody id="listUsersModal">
+
+                            </tbody>
+                          </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
         <span class="float-right" id="selectBoard">
             <p>Sélectionner un tableau : </p>
         </span>
@@ -64,7 +102,7 @@
                 </div>
             </div>
         </div>
-        <br/>
+        <br />
 
 
         <div class="card">

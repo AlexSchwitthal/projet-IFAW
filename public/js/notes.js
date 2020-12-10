@@ -242,14 +242,14 @@ $(document).ready(function() {
                 }
 
                 // chargement de la liste des utilisateurs
-                $("#listUsers").empty();
+                $("#listUsersModal").empty();
                 for(let user of response.users) {
                     if(user.login != response.currentUser) {
                         if (response.board.users.some(e => e.name === user.login)) {
-                            $("#listUsers").append(userElement(user._id, user.login, "inside"));
+                            $("#listUsersModal").append(userElement(user._id, user.login, "inside"));
                         }
                         else {
-                            $("#listUsers").append(userElement(user._id, user.login, "outside"));
+                            $("#listUsersModal").append(userElement(user._id, user.login, "outside"));
                         }
                     }
                 }
@@ -275,13 +275,15 @@ $(document).ready(function() {
             icon = "times";
         }
         var user =  "<div class=" + type + ">" +
-                        "<div class='dropdown-item' id=" + id + ">" + 
-                            "<span>" + userName + "</span>" +
-                            "<span class='fas fa-" + icon + " float-right'></span>" +
+                        "<div id=" + id + ">" + 
+                            "<tr><td>" + userName + "</td>" +
+                            "<td><span class='fas fa-" + icon + " float-right'></span></td></tr>" +
                         "</div>" +
                 "</div>";
         return user;
     }
+
+
 
     function changeColor(_id, boardId, color) {
         data = {};
