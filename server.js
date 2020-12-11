@@ -19,6 +19,7 @@ app.use(express.static('public'));
 app.set('view engine', 'ejs');
 
 app.use(function(req, res, next) {
+	res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
 	ssn = req.session; 
 	if(ssn.login) {
 		res.locals.login = ssn.login;
@@ -69,7 +70,7 @@ app.get('/register', isNotAuthenticated, (req, res) => {
 
 app.post('/register', (req, res) => {
 	if(req.body.username == "" || req.body.password == "") {
-		res.render('register', {erreur : "il doit y avoir un nom d'utilisateur et un mot de passe !"});
+		res.render('register', {erreur : "il doit y avoir un nom d'utilisateur et un mot de passe !"})
 	}
 	try {
 		queries.getSpecificUser(req.body.username, req.body.password).then(result => {
