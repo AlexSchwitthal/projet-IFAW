@@ -221,7 +221,12 @@ app.delete('/deleteNote', (req, res) => {
 
 
 app.all('*', function(req, res) {
-	res.render('login');
+	if(ssn.login) {
+		res.redirect('/users');
+	}
+	else {
+		res.redirect('/login');
+	}
 })
 
 app.listen(4200,() => {
