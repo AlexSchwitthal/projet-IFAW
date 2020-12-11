@@ -9,7 +9,7 @@ app.use(session({secret:'XASDASDA'}));
 var ssn;
 
 // DB
-const db = require('./models/db.js').connectToDB();
+require('./models/db.js').connectToDB();
 const queries = require('./models/queries.js');
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -24,7 +24,7 @@ app.use(function(req, res, next) {
 		res.locals.login = ssn.login;
 		res.locals.password = ssn.password;
 
-/* 		var cookie = req.cookies.login;
+		/* 		var cookie = req.cookies.login;
 		if (cookie === undefined) {
 		  	res.cookie('login', ssn.login, { maxAge: 900000, httpOnly: true });
 		  	res.cookie('nbConnexions', 0, { maxAge: 900000, httpOnly: true });
@@ -122,7 +122,7 @@ app.get('/users', isAuthenticated, (req, res) => {
 	queries.findAllBoardsByUser(ssn.login).then(allBoards => {
 		queries.getAllUsers().then(allUsers => {
 			res.render('users', {users: allUsers, boards : allBoards});
-		}).catch(err => res.render('users'));
+		}).catch( () => res.render('users'));
 	})
 });
 
@@ -221,7 +221,7 @@ app.delete('/deleteNote', (req, res) => {
 
 
 app.all('*', function(req, res) {
-    res.render('login');
+	res.render('login');
 })
 
 app.listen(4200,() => {
