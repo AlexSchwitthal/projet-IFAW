@@ -68,6 +68,9 @@ app.get('/register', isNotAuthenticated, (req, res) => {
 })
 
 app.post('/register', (req, res) => {
+	if(req.body.username == "" || req.body.password == "") {
+		res.render('register', {erreur : "il doit y avoir un nom d'utilisateur et un mot de passe !"});
+	}
 	try {
 		queries.getSpecificUser(req.body.username, req.body.password).then(result => {
 			if(result == null) {

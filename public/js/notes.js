@@ -269,7 +269,7 @@ $(document).ready(function() {
 
 	// fonction d'une note du tableau
 	function noteElement(id, text, color) {
-		var note = '<li style="background-color:' +color +'"><p maxlength="30" contentEditable="true" id=' + id + '>' + text 
+		var note = '<li style="background-color:' +color +'"><p onpaste="return false;" maxlength="30" contentEditable="true" id=' + id + '>' + text 
         + '</p><button class="chooseColor" style="background-color:#11ffee00;outline: 0;border-style: none; "><img width="13" height="13" src ="/img/ColorWheel.png"/></button>' 
         + '<button class="deleteNote" style="background-color:#11ffee00;outline: 0;border-style: none; ">✘</button></li>';
 		return note;
