@@ -175,8 +175,13 @@ app.put('/addNote', (req, res) => {
 
 app.put('/addUser', (req, res) => {
 	queries.findBoardById(req.body.boardId).then(board => {
-		queries.addUserToBoard(board, req.body._id, req.body.name);
-		res.send("success");
+		var result = queries.addUserToBoard(board, req.body._id, req.body.name);
+		if(result == "error") {
+			res.status(500).send({error: 'une erreur est survenue !'}); 
+		}
+		else {
+			res.send("success");
+		}
 	})
 
 });

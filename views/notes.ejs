@@ -37,11 +37,15 @@
                 <%
                 if(boards) {
                     for(let element of boards) {
+                        var boardCreator = "";
+                        if(element.creator_name != locals.login) {
+                            boardCreator = " -- " + element.creator_name;
+                        }
                         if(board._id == element._id) {
-                            %> <option value="<%= element._id %>" selected><%= element.name %></option> <% 
+                            %> <option value="<%= element._id %>" selected><%= element.name %><%= boardCreator %></option> <% 
                         }
                         else {
-                            %> <option value="<%= element._id %>"><%= element.name %></option> <% 
+                            %> <option value="<%= element._id %>"><%= element.name %><%= boardCreator %></option> <% 
                         }
                     }
                 }

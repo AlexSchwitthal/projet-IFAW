@@ -138,13 +138,16 @@ $(document).ready(function() {
     }));
 
     // ajout d'un utilisateur au tableau
-    $("#listUsers").on("click", ".outside .dropdown-item", (function() {
-        var type = this.parentNode;
-        var icon = this.children[1];
+    $("body").on("click", ".outside", (function() {
+        var type = this;
+        var icon = this.firstElementChild.firstElementChild;
+        var name = this.firstElementChild.innerHTML;
+        var name = name.split('<span');
 
         var data = {};
-        data._id = this.id;
-        data.name = this.firstElementChild.innerHTML;
+        data._id = this.firstElementChild.id;
+        data.name = name[0];
+
         data.boardId = $('#listBoards').val();
         $.ajax({
             type : "PUT",
@@ -161,13 +164,16 @@ $(document).ready(function() {
     }));
 
     // suppression d'un utilisateur au tableau
-    $("#listUsers").on("click", ".inside .dropdown-item", (function() {
-        var type = this.parentNode;
-        var icon = this.children[1];
-        
+    $("body").on("click", ".inside", (function() {
+        var type = this;
+        var icon = this.firstElementChild.firstElementChild;
+        var name = this.firstElementChild.innerHTML;
+        var name = name.split('<span');
+
         var data = {};
-        data._id = this.id;
-        data.name = this.firstElementChild.innerHTML;
+        data._id = this.firstElementChild.id;
+        data.name = name[0];
+
         data.boardId = $('#listBoards').val();
         $.ajax({
             type : "DELETE",
