@@ -1,5 +1,6 @@
 $(document).ready(function() {
 	var isTyping = false;
+	var canShareBoard = false;
 	var modal = document.getElementById("modal1"); 
 	var spanCloseModal = document.getElementById("closeModal");
 	changeBoard($('#listBoards').val());
@@ -139,54 +140,58 @@ $(document).ready(function() {
 
 	// ajout d'un utilisateur au tableau
 	$("body").on("click", ".outside", (function() {
-		var type = this;
-		var icon = this.firstElementChild.firstElementChild;
-		var name = this.firstElementChild.innerHTML;
-		name = name.split('<span');
-
-		var data = {};
-		data._id = this.firstElementChild.id;
-		data.name = name[0];
-
-		data.boardId = $('#listBoards').val();
-		$.ajax({
-			type : "PUT",
-			url : "addUser",
-			data: JSON.stringify(data),
-			contentType: "application/json; charset=utf-8",
-			success : function() {
-				type.classList.remove("outside");
-				type.classList.add("inside");
-				icon.classList.remove("fa-check");
-				icon.classList.add("fa-times");
-			},
-		});
+		if(canShareBoard) {
+			var type = this;
+			var icon = this.firstElementChild.firstElementChild;
+			var name = this.firstElementChild.innerHTML;
+			name = name.split('<span');
+	
+			var data = {};
+			data._id = this.firstElementChild.id;
+			data.name = name[0];
+	
+			data.boardId = $('#listBoards').val();
+			$.ajax({
+				type : "PUT",
+				url : "addUser",
+				data: JSON.stringify(data),
+				contentType: "application/json; charset=utf-8",
+				success : function() {
+					type.classList.remove("outside");
+					type.classList.add("inside");
+					icon.classList.remove("fa-check");
+					icon.classList.add("fa-times");
+				},
+			});
+		}
 	}));
 
 	// suppression d'un utilisateur au tableau
 	$("body").on("click", ".inside", (function() {
-		var type = this;
-		var icon = this.firstElementChild.firstElementChild;
-		var name = this.firstElementChild.innerHTML;
-		name = name.split('<span');
+		if(canShareBoard) {
+			var type = this;
+			var icon = this.firstElementChild.firstElementChild;
+			var name = this.firstElementChild.innerHTML;
+			name = name.split('<span');
 
-		var data = {};
-		data._id = this.firstElementChild.id;
-		data.name = name[0];
+			var data = {};
+			data._id = this.firstElementChild.id;
+			data.name = name[0];
 
-		data.boardId = $('#listBoards').val();
-		$.ajax({
-			type : "DELETE",
-			url : "removeUser",
-			data: JSON.stringify(data),
-			contentType: "application/json; charset=utf-8",
-			success : function() {
-				type.classList.remove("inside");
-				type.classList.add("outside");
-				icon.classList.remove("fa-times");
-				icon.classList.add("fa-check");
-			},
-		});
+			data.boardId = $('#listBoards').val();
+			$.ajax({
+				type : "DELETE",
+				url : "removeUser",
+				data: JSON.stringify(data),
+				contentType: "application/json; charset=utf-8",
+				success : function() {
+					type.classList.remove("inside");
+					type.classList.add("outside");
+					icon.classList.remove("fa-times");
+					icon.classList.add("fa-check");
+				},
+			});
+		}
 	}));
 
 	// ajout d'un tableau
@@ -251,9 +256,11 @@ $(document).ready(function() {
 				$("#listUsersModal").empty();
 				if(response.currentUser != response.board.creator_name) {
 					document.getElementById("share").disabled = true;
+					canShareBoard = false;
 				}
 				else {
 					document.getElementById("share").disabled = false;
+					canShareBoard = true;
 				}
 
 				for(let user of response.users) {
