@@ -157,7 +157,7 @@ $(document).ready(function() {
 			success : function() {
 				type.classList.remove("outside");
 				type.classList.add("inside");
-				icon.classList.remove("fa-plus");
+				icon.classList.remove("fa-check");
 				icon.classList.add("fa-times");
 			},
 		});
@@ -184,7 +184,7 @@ $(document).ready(function() {
 				type.classList.remove("inside");
 				type.classList.add("outside");
 				icon.classList.remove("fa-times");
-				icon.classList.add("fa-plus");
+				icon.classList.add("fa-check");
 			},
 		});
 	}));
@@ -276,7 +276,7 @@ $(document).ready(function() {
 	}
 
 	function userElement(id, userName, type) {
-		var icon = "plus";
+		var icon = "check";
 		if(type == "inside") {
 			icon = "times";
 		}
