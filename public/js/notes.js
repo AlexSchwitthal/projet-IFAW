@@ -249,6 +249,13 @@ $(document).ready(function() {
 
 				// chargement de la liste des utilisateurs
 				$("#listUsersModal").empty();
+				if(response.currentUser != response.board.creator_name) {
+					document.getElementById("share").disabled = true;
+				}
+				else {
+					document.getElementById("share").disabled = false;
+				}
+
 				for(let user of response.users) {
 					if(user.login != response.currentUser) {
 						if (response.board.users.some(e => e.name === user.login)) {
