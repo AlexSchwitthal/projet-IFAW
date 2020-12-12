@@ -2,6 +2,7 @@ $(document).ready(function() {
 	var isTyping = false;
 	var canShareBoard = false;
 	var modal = document.getElementById("modal1"); 
+	var filter = "";
 	var spanCloseModal = document.getElementById("closeModal");
 	changeBoard($('#listBoards').val());
 
@@ -67,6 +68,137 @@ $(document).ready(function() {
 		}, 2000);
 	})); 
 
+	function colorFilter(){		
+		console.log("filter " + filter);
+		$("#notesBoard").children().each(function() {
+			if (filter === ""){
+				this.style.display = "block";
+			}else{
+				console.log(this.style.backgroundColor);
+				this.style.display = "none";
+				if(filter.includes("green") && this.style.backgroundColor ==="rgb(134, 247, 137)"){					
+					this.style.display = "block";
+				}
+				else if (filter.includes("yellow") && this.style.backgroundColor ==="rgb(246, 255, 122)"){
+					this.style.display = "block";
+				}
+				else if (filter.includes("blue") && this.style.backgroundColor ==="rgb(107, 188, 242)"){
+					this.style.display = "block";
+				}
+				else if (filter.includes("orange") && this.style.backgroundColor ==="rgb(245, 175, 91)"){
+					this.style.display = "block";
+				}
+				else if (filter.includes("red") && this.style.backgroundColor ==="rgb(242, 107, 107)"){
+					this.style.display = "block";
+				}
+			}
+			
+		}) 		
+	}
+
+	$('#filtresList').on('click', 'li', (function() {
+		// Clic sur le filtre blanc qui efface tous les filtres enregistrés
+		if(this.id == "flitreAll"){
+			while(document.getElementsByClassName("activeFilter").length!=0){
+				let activeFilters = document.getElementsByClassName("activeFilter");
+				for (let index = 0; index < activeFilters.length; ++index) {
+					activeFilters[index].style.borderStyle = "dotted";
+					activeFilters[index].classList.remove("activeFilter");	
+				}
+			}	
+			filter = "";		
+		}else{
+			// Modification de l'icone du filtre
+			if (this.classList.contains("activeFilter")){
+				this.classList.remove("activeFilter");
+				this.style.borderStyle = "dotted";				
+			}else{
+				this.classList.add("activeFilter");
+				this.style.borderStyle = "solid";
+			}
+
+			//Gestion du bleu
+			if(document.getElementById("filtreBlue").classList.contains("activeFilter")){
+				if (!filter.includes("blue")){
+					filter += "blue ";
+				}
+				
+			}else{
+				if (filter.includes("blue")){
+					filter = filter.replace('blue ','');
+				}
+			}
+
+			//Gestion du vert
+			if(document.getElementById("filtreGreen").classList.contains("activeFilter")){
+				if (!filter.includes("green")){
+					filter += "green ";
+				}
+			}else{
+				if (filter.includes("green")){
+					filter = filter.replace('green ','');
+				}
+			}
+
+
+			//Gestion du jaune
+			if(document.getElementById("filtreYellow").classList.contains("activeFilter")){
+				if (!filter.includes("yellow")){
+					filter += "yellow ";
+				}
+			}else{
+				if (filter.includes("yellow")){
+					filter = filter.replace('yellow ','');
+				}
+			}
+
+
+			//Gestion du orange
+			if(document.getElementById("filtreOrange").classList.contains("activeFilter")){
+				if (!filter.includes("orange")){
+					filter += "orange ";
+				}
+			}else{
+				if (filter.includes("orange")){
+					filter = filter.replace('orange ','');
+				}
+			}
+
+			//Gestion du rouge
+			if(document.getElementById("filtreRed").classList.contains("activeFilter")){
+				if (!filter.includes("red")){
+					filter += "red ";
+				}				
+			}else{				
+				if (filter.includes("red")){					
+					filter = filter.replace("red ","");
+				}
+			}
+			
+			/*
+			var activeFilters = document.getElementsByClassName("activeFilter");
+			for(let j=0; j<activeFilters.length;j++){
+				console.log("active " + activeFilters[j]);
+			}
+			var listeCouleurs = [];
+			for (let index = 0; index < activeFilters.length; ++index) {
+				listeCouleurs[index] = activeFilters[index].backgroundColor;
+				console.log("aaaaaaaaaaa" +activeFilters[index].background);								
+			}
+			$("#notesBoard").children().each(function() {
+				if (!listeCouleurs.includes(this.style.background)){
+					this.style.display = "none";
+					console.log("1" + this.style.background);
+				}
+				
+			}) */
+			
+		} 
+		colorFilter();		
+	
+	}));
+
+	
 
 	// choix de la couleur d'une note
 	$('.notes ul').on('click', 'li .chooseColor', (function() {       
@@ -251,6 +383,7 @@ $(document).ready(function() {
 				for(let note of response.board.notes) {
 					$(".notes > ul").append(noteElement(note._id, note.text, note.color));
 				}
+				colorFilter();
 
 				// chargement de la liste des utilisateurs
 				$("#listUsersModal").empty();

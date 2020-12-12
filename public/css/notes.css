@@ -91,31 +91,55 @@
 .outside .dropdown-item {
     background-color: lightgreen !important;
 }
+
+#divSearch{
+    float: left;
+    margin-right: 25px;
+}
+
+#filtres{
+    display:inline-block;    
+}
+ 
+#filtres p, #filtres ul {
+    display: inline-block; 
+}
+
+#filtresList li{
+    width: 40px;
+    height: 20px;
+    border-style: dotted;
+    border-color: #000;
+    cursor: pointer;
+    display: inline-block;
+}
+
+
 #colorList li{
     display: inline-block;
     width: 20px;
     height: 20px;
     border-style: solid;
-   
+    cursor: pointer;
 }
 
-#colorGreen{
+#colorGreen, #filtreGreen{
     background: #86f789;
 }
 
-#colorBlue{
+#colorBlue, #filtreBlue{
     background: #6bbcf2;
 }
 
-#colorYellow{
+#colorYellow, #filtreYellow{
     background :#f6ff7a;
 }
 
-#colorOrange{
+#colorOrange, #filtreOrange{
     background :#f5af5b;
 }
 
-#colorRed{
+#colorRed, #filtreRed{
     background: #f26b6b;
 }
 
