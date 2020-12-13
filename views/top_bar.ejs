@@ -22,9 +22,14 @@
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <%
                     if(boards) {
-                        for(let board of boards) {
-                            %><a class="dropdown-item" href="/notes?board=<%=board._id%>"><%= board.name %></a>
-                            <%
+                        for(let element of boards) {
+                            if(element != null) {
+                                var boardCreator = "";
+                                if(element.creator_name != locals.login) {
+                                    boardCreator = " -- " + element.creator_name;
+                                }
+                                %><a class="dropdown-item" href="/notes?board=<%=element._id%>"><%= element.name %><%= boardCreator %></a><%
+                            }
                         }
                     }
                     %> 
@@ -48,8 +53,6 @@
                 <a class="nav-link" href="/logout">Changer de compte<span class="sr-only">(current)</span></a>
                 <a class="nav-link" href="/logout">Deconnexion<span class="sr-only">(current)</span></a>
             </div>
-
-
         </div>
     </div>
 </nav>
