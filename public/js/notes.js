@@ -28,20 +28,6 @@ $(document).ready(function() {
 		});
 	});
 
-	// deprecated
-	/*     $('ul').on('focusout', 'li p', (function() {
-        var data = {};
-        data._id = this.id;
-        data.text = $(this).html();
-        data.boardId = $('#listBoards').val();
-        $.ajax({
-            type : "PUT",
-            url : "saveNote",
-            data: JSON.stringify(data),
-            contentType: "application/json; charset=utf-8"
-        });
-    })); */
-
 	// sauvegarde d'une note dès que l'on arrête d'écrire pendant plus d'1 seconde
 	var searchTimeout;
 	$('ul').on('keyup', 'li p', (function() {
@@ -71,9 +57,10 @@ $(document).ready(function() {
 	function colorFilter(){		
 		console.log("filter " + filter);
 		$("#notesBoard").children().each(function() {
-			if (filter === ""){
+			if (filter === "") {
 				this.style.display = "block";
-			}else{
+			}
+			else {
 				console.log(this.style.backgroundColor);
 				this.style.display = "none";
 				if(filter.includes("green") && this.style.backgroundColor ==="rgb(134, 247, 137)"){					
@@ -92,13 +79,12 @@ $(document).ready(function() {
 					this.style.display = "block";
 				}
 			}
-			
 		}) 		
 	}
 
 	$('#filtresList').on('click', 'li', (function() {
 		// Clic sur le filtre blanc qui efface tous les filtres enregistrés
-		if(this.id == "flitreAll"){
+		if(this.id == "flitreAll") {
 			while(document.getElementsByClassName("activeFilter").length!=0){
 				let activeFilters = document.getElementsByClassName("activeFilter");
 				for (let index = 0; index < activeFilters.length; ++index) {
@@ -107,73 +93,96 @@ $(document).ready(function() {
 				}
 			}	
 			filter = "";		
-		}else{
+		}
+		else {
 			// Modification de l'icone du filtre
 			if (this.classList.contains("activeFilter")){
 				this.classList.remove("activeFilter");
 				this.style.borderStyle = "dotted";				
-			}else{
+			}
+			else {
 				this.classList.add("activeFilter");
 				this.style.borderStyle = "solid";
 			}
 
+			var colorList = ["blue", "green", "yellow", "orange", "red"];
+			
+			for(var color of colorList) {
+				var elementId = "filtre" + color.charAt(0).toUpperCase() + color.slice(1);
+				if(document.getElementById(elementId).classList.contains("activeFilter")) {
+					if (!filter.includes(color)){
+						filter += color + " ";
+					}
+				}
+				else {
+					if(filter.includes(color)) {
+						filter = filter.replace(color + " ", " ");
+					}
+				}
+			}
+			
 			//Gestion du bleu
-			if(document.getElementById("filtreBlue").classList.contains("activeFilter")){
+		/* 	if(document.getElementById("filtreBlue").classList.contains("activeFilter")) {
 				if (!filter.includes("blue")){
 					filter += "blue ";
 				}
 				
-			}else{
-				if (filter.includes("blue")){
+			}
+			else {
+				if(filter.includes("blue")) {
 					filter = filter.replace('blue ','');
 				}
 			}
 
 			//Gestion du vert
-			if(document.getElementById("filtreGreen").classList.contains("activeFilter")){
-				if (!filter.includes("green")){
+			if(document.getElementById("filtreGreen").classList.contains("activeFilter")) {
+				if(!filter.includes("green")) {
 					filter += "green ";
 				}
-			}else{
-				if (filter.includes("green")){
+			}
+			else {
+				if(filter.includes("green")) {
 					filter = filter.replace('green ','');
 				}
 			}
 
 
 			//Gestion du jaune
-			if(document.getElementById("filtreYellow").classList.contains("activeFilter")){
-				if (!filter.includes("yellow")){
+			if(document.getElementById("filtreYellow").classList.contains("activeFilter")) {
+				if (!filter.includes("yellow")) {
 					filter += "yellow ";
 				}
-			}else{
-				if (filter.includes("yellow")){
+			}
+			else {
+				if(filter.includes("yellow")) {
 					filter = filter.replace('yellow ','');
 				}
 			}
 
 
 			//Gestion du orange
-			if(document.getElementById("filtreOrange").classList.contains("activeFilter")){
-				if (!filter.includes("orange")){
+			if(document.getElementById("filtreOrange").classList.contains("activeFilter")) {
+				if(!filter.includes("orange")) {
 					filter += "orange ";
 				}
-			}else{
-				if (filter.includes("orange")){
+			}
+			else {
+				if(filter.includes("orange")) {
 					filter = filter.replace('orange ','');
 				}
 			}
 
 			//Gestion du rouge
 			if(document.getElementById("filtreRed").classList.contains("activeFilter")){
-				if (!filter.includes("red")){
+				if(!filter.includes("red")) {
 					filter += "red ";
 				}				
-			}else{				
-				if (filter.includes("red")){					
+			}
+			else {				
+				if(filter.includes("red")) {					
 					filter = filter.replace("red ","");
 				}
-			}
+			} */
 			
 			/*
 			var activeFilters = document.getElementsByClassName("activeFilter");
