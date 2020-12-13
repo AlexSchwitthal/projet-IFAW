@@ -45,7 +45,7 @@ app.get('/login', isNotAuthenticated, (req, res) => {
 });
 
 app.post('/login', (req, res) => {
-	queries.getSpecificUser(req.body.username, req.body.password).then(result => {
+	queries.getSpecificUser(req.body.username).then(result => {
 		if(result != null) {
 			ssn = req.session;
 			ssn.login = req.body.username;
@@ -73,13 +73,13 @@ app.post('/register', (req, res) => {
 		res.render('register', {erreur : "il doit y avoir un nom d'utilisateur et un mot de passe !"})
 	}
 	try {
-		queries.getSpecificUser(req.body.username, req.body.password).then(result => {
+		queries.getSpecificUser(req.body.username).then(result => {
 			if(result == null) {
 				queries.addUser(req.body.username.toLowerCase(), req.body.password);
-				res.render('login', {success : "success"});
+				res.render('login', {success : "votre compte a bien été crée !"});
 			}
 			else {
-				res.render('register', {erreur : "nom d'utilisateurs déjà pris !"});
+				res.render('register', {erreur : "ce nom d'utilisateur est déjà pris :("});
 			}
 		});
 	}
@@ -92,8 +92,8 @@ app.post('/register', (req, res) => {
 app.get('/notes/', isAuthenticated, (req, res) => {
 	try {
 		queries.getAllUsers().then(allUsers => {
-			queries.findAllBoardsByUser(ssn.login).then(allBoards => {
-				if(allBoards != null) {
+			queries.findAllBoardsByUser(ssn.login).then(async function (allBoards) {
+				if(allBoards.length != 0) {
 					if(req.query.board) {
 						for(var board of allBoards) {
 							if(board._id == req.query.board) {
@@ -106,10 +106,10 @@ app.get('/notes/', isAuthenticated, (req, res) => {
 					}
 				}
 				else {
-					queries.addBoard(ssn.login, ssn.password, "Tableau n°1");
-					queries.findBoardByUserId(ssn.login, ssn.password).then(newBoard => {
+					await queries.addBoard(ssn.login, "Tableau n°1");
+					queries.findBoardByUserId(ssn.login).then(newBoard => {
 						var newBoards = [newBoard];
-						res.render('notes', {board: newBoard[0], boards: newBoards, users: allUsers});
+						res.render('notes', {board: newBoards[0], boards: newBoards, users: allUsers});
 					});
 				}
 			})
@@ -131,7 +131,8 @@ app.get('/users', isAuthenticated, (req, res) => {
 });
 
 
-// DEBUT APPEL AJAX
+
+// ---------- DEBUT APPEL AJAX ----------
 app.post('/changeBoard', (req, res) => {
 	try {
 		if(req.body.boardId != "") {
@@ -207,7 +208,7 @@ app.delete('/removeUser', (req, res) => {
 });
 
 app.put('/addBoard', (req, res) => {
-	queries.addBoard(ssn.login, ssn.password, req.body.boardName).then(newBoard => {
+	queries.addBoard(ssn.login, req.body.boardName).then(newBoard => {
 		if(newBoard == "error") {
 			res.status(500).send({error: 'une erreur est survenue !'}); 
 		}
@@ -230,7 +231,7 @@ app.delete('/deleteNote', (req, res) => {
 		res.send("success");
 	})
 });
-// FIN APPEL AJAX
+// ---------- FIN APPEL AJAX ----------
 
 
 app.all('*', function(req, res) {

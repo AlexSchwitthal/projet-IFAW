@@ -25,8 +25,8 @@ module.exports = {
         });
     },
 
-    getSpecificUser: function(login, password) {
-        return users.findOne({login : login, password: password},(error, user) => {
+    getSpecificUser: function(login) {
+        return users.findOne({login : login},(error, user) => {
             if(error) return console.error(error);
             return user;
         });
@@ -39,9 +39,9 @@ module.exports = {
         });
     },
 
-    findBoardByUserId: async function(login, password) {
+    findBoardByUserId: async function(login) {
         try {
-            const currentUser = await this.getSpecificUser(login, password);
+            const currentUser = await this.getSpecificUser(login);
             return boards.findOne({ creator_id: currentUser._id }, (error, board) => {
                 if (error)
                     return console.error(error);
@@ -70,8 +70,8 @@ module.exports = {
         return boards.find().or([{ "users.name": login }, {creator_name: login}]);
     },
 
-    addBoard: async function(login, password, boardName) {
-        const currentUser = await this.getSpecificUser(login, password);
+    addBoard: async function(login, boardName) {
+        const currentUser = await this.getSpecificUser(login);
         const checkBoard = await this.findBoardByName(currentUser._id, boardName);
         if(checkBoard != null) {
             return "error";
