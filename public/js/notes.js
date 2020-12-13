@@ -116,7 +116,7 @@ $(document).ready(function() {
 				}
 				else {
 					if(filter.includes(color)) {
-						filter = filter.replace(color + " ", " ");
+						filter = filter.replace(color + " ", "");
 					}
 				}
 			}
