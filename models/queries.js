@@ -93,11 +93,13 @@ module.exports = {
         return newBoard;
     },
 
-    addNote: function(board, text, color) {
+    addNote: function(board, text, color, x, y) {
         var newNote = {
             _id : mongoose.Types.ObjectId(),
             text: text,
-            color: color
+            color: color,
+            x: x,
+            y: y
         }
         board.notes.push(newNote);
         board.save();
@@ -145,6 +147,26 @@ module.exports = {
                 if(err) return err;
             }
         );
+        board.save();
+    },
+
+    editNotePosition: function(board, noteId, x, y) {
+        //console.log("EditNotePosition : x =" + x + ", y =" + y + "noteid =" + noteId );
+        boards.updateOne(
+        { 
+            "_id": mongoose.Types.ObjectId(board._id),
+            "notes._id": mongoose.Types.ObjectId(noteId) 
+        }, 
+        { 
+            "$set": 
+            { 
+               "notes.$.x": x,
+               "notes.$.y": y
+            }
+        }, 
+        function(err) {
+            if(err) return err;
+        });
         board.save();
     },
 

@@ -80,6 +80,10 @@
     margin-right:15px;
 }
 
+.hide-note{
+    opacity: 0;
+}
+
 #addUsers {
     margin-left:15px;
 }
