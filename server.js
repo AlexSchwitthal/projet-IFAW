@@ -170,10 +170,19 @@ app.put('/saveNote', (req, res) => {
 	}
 });
 
+app.put('/editNotePosition', (req, res) => {
+	queries.findBoardById(req.body.boardId).then(board => {
+		var { _id, x, y } = req.body;
+			queries.editNotePosition(board, _id, x, y);
+			res.send("success");
+	})
+});
+
 
 app.put('/addNote', (req, res) => {
 	queries.findBoardById(req.body.boardId).then(board => {
-		var newNote = queries.addNote(board, "new note", req.body.color);
+		var { color, x, y } = req.body;
+		var newNote = queries.addNote(board, "new note", color, x, y);
 		res.send(newNote);
 	});
 });
