@@ -95,10 +95,15 @@ app.get('/notes/', isAuthenticated, (req, res) => {
 			queries.findAllBoardsByUser(ssn.login).then(async function (allBoards) {
 				if(allBoards.length != 0) {
 					if(req.query.board) {
+						var exist = false;
 						for(var board of allBoards) {
 							if(board._id == req.query.board) {
 								res.render('notes', {board: board, boards: allBoards, users: allUsers});
+								exist = true;
 							}
+						}
+						if(!exist) {
+							res.redirect('notes');
 						}
 					}
 					else {
@@ -173,8 +178,8 @@ app.put('/saveNote', (req, res) => {
 app.put('/editNotePosition', (req, res) => {
 	queries.findBoardById(req.body.boardId).then(board => {
 		var { _id, x, y } = req.body;
-			queries.editNotePosition(board, _id, x, y);
-			res.send("success");
+		queries.editNotePosition(board, _id, x, y);
+		res.send("success");
 	})
 });
 
