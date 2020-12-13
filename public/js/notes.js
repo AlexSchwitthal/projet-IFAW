@@ -46,8 +46,8 @@ $(document).ready(function() {
         var data = {};
         data.boardId = $('#listBoards').val();
 		data.color = "#f6ff7a";
-		data.x = 100;
-		data.y = 100;
+		data.x = 0;
+		data.y = 0;
         $.ajax({
             type : "PUT",
             url : "addNote",
