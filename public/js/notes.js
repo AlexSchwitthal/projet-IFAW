@@ -39,7 +39,7 @@ $(document).ready(function() {
 		if(!isTyping) {
 			changeBoard($('#listBoards').val());
 		}
-	}, 60000);
+	}, 5000);
 
 	// ajout d'une note
 	$("#addNote").click(function() {
