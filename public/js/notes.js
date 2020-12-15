@@ -39,47 +39,30 @@ $(document).ready(function() {
 		if(!isTyping) {
 			changeBoard($('#listBoards').val());
 		}
-	}, 12000);
+	}, 5000);
 
 	// ajout d'une note
 	$("#addNote").click(function() {
         var data = {};
         data.boardId = $('#listBoards').val();
 		data.color = "#f6ff7a";
+		data.x = 0;
+		data.y = 0;
         $.ajax({
             type : "PUT",
             url : "addNote",
             data: JSON.stringify(data),
             contentType: "application/json; charset=utf-8",
             success : function(newNote) {
-                var $noteElt= $(noteElement(newNote._id, newNote.text, newNote.color));
+                var $noteElt = $(noteElement(newNote._id, newNote.text, newNote.color, newNote.x, newNote.y));
                 $(".notes > ul").append($noteElt);
                 /*$noteElt.css("top", "10px");
-				$noteElt.css("left", "10px");*/
-				//var { top, left } = $noteElt.position();
-				$noteElt.css("left", "0px");
-				$noteElt.css("top", "0px");
+                $noteElt.css("left", "10px");*/
                 $noteElt.draggable(draggableOption).click(function() {
                     $(this).draggable( {disabled: false });
                 }).dblclick(function() {
                     $(this).draggable({ disabled: true });
-				});
-				
-				var data = {};
-				data._id = newNote._id;
-				data.x = 0;
-				data.y = 0;
-				data.boardId = $('#listBoards').val();
-				$.ajax({
-					type : "PUT",
-					url : "editNotePosition",
-					data: JSON.stringify(data),
-					contentType: "application/json; charset=utf-8",
-					error: function () {
-						console.log("erreur");
-					},
-					timeout: 2000
-				});
+                });
                 //$noteElt.draggable();
             }
         });
@@ -410,7 +393,7 @@ $(document).ready(function() {
 	// fonction d'une note du tableau
 	function noteElement(id, text, color, x, y) {
 		var position = x != null ? `;left:${x}px;top:${y}px` : '';
-		var note = '<li style="position:absolute; background-color:' +color + position +'"><p onpaste="return false;" maxlength="30" contentEditable="true" id=' + id + '>' + text 
+		var note = '<li style="background-color:' +color + position +'"><p onpaste="return false;" maxlength="30" contentEditable="true" id=' + id + '>' + text 
         + '</p><button class="chooseColor" style="background-color:#11ffee00;outline: 0;border-style: none; "><img width="13" height="13" src ="/img/ColorWheel.png"/></button>' 
         + '<button class="deleteNote" style="background-color:#11ffee00;outline: 0;border-style: none; ">✘</button></li>';
 		return note;
