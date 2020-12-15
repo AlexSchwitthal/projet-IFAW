@@ -9,6 +9,7 @@
 .notes ul{
     overflow:hidden;
     padding:3em;
+    height: 600px;
 }
 .notes ul li {
     text-decoration:none;
