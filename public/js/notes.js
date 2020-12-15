@@ -161,12 +161,10 @@ $(document).ready(function() {
 				}
 			}
 		} 
-		colorFilter();		
-	
+		colorFilter();
 	}));
 
 	
-
 	// choix de la couleur d'une note
 	$('.notes ul').on('click', 'li .chooseColor', (function() {       
 		var _id = this.parentNode.firstElementChild.id;
@@ -208,7 +206,7 @@ $(document).ready(function() {
 	}));
 
 
-	// Fermetrure modal choix couleur
+	// Fermeture modal choix couleur
 	spanCloseModal.onclick = function() {
 		modal.style.display = "none";
 	}

@@ -3,6 +3,8 @@ const users = require('./collections.js').users();
 const boards = require('./collections.js').boards();
 
 module.exports = {
+
+    // récupère la liste des utilisateurs
 	getAllUsers: function() {
         return users.find((error, users) => {
             if(error) return console.error(error);
@@ -10,6 +12,7 @@ module.exports = {
         });
     },
 
+    // ajoute un utilisateur dans la base de données
     addUser: function(login, password) {
         const newUser = new users({ 
             _id : mongoose.Types.ObjectId(),
@@ -25,6 +28,7 @@ module.exports = {
         });
     },
 
+    // récupère un utilisateur en fonction d'un login donné
     getSpecificUser: function(login) {
         return users.findOne({login : login},(error, user) => {
             if(error) return console.error(error);
@@ -32,6 +36,7 @@ module.exports = {
         });
     },
 
+    // récupère un tableau en fonction d'une ID donnée
     findBoardById : function(boardId) {
         return boards.findOne({_id : mongoose.Types.ObjectId(boardId)},(error, board) => {
             if(error) return console.error(error);
@@ -39,6 +44,7 @@ module.exports = {
         });
     },
 
+    // récupère un tableau en fonction du login d'un utilisateur donné
     findBoardByUserId: async function(login) {
         try {
             const currentUser = await this.getSpecificUser(login);
@@ -53,6 +59,7 @@ module.exports = {
         }
     },
 
+    // récupère un tableau en fonction de l'id d'un utlisateur et du nom d'un tableau
     findBoardByName: function(userId, boardName) {
         try {
             return boards.findOne({ creator_id: userId, name: boardName }, (error, board) => {
@@ -66,10 +73,12 @@ module.exports = {
         }
     },
 
+    // récupère tous les tableaux où un nom d'utilisateur apparait (créateur ou utilisateur)
     findAllBoardsByUser: async function(login) {
         return boards.find().or([{ "users.name": login }, {creator_name: login}]);
     },
 
+    // ajoute un tableau dans la base de données
     addBoard: async function(login, boardName) {
         const currentUser = await this.getSpecificUser(login);
         const checkBoard = await this.findBoardByName(currentUser._id, boardName);
@@ -93,6 +102,7 @@ module.exports = {
         return newBoard;
     },
 
+    // ajoute une note à un tableau donné
     addNote: function(board, text, color, x, y) {
         var newNote = {
             _id : mongoose.Types.ObjectId(),
@@ -106,6 +116,7 @@ module.exports = {
         return newNote;
     },
 
+    // change le texte d'une note
     editNote: function(board, noteId, text) {
         text = text.split('$nbsp;').join('');
         text = text.split('$amp;').join('');
@@ -131,6 +142,7 @@ module.exports = {
         board.save();
     },
 
+    // change la couleur d'une note
     chooseColor: function(board, noteId, color){
         boards.updateOne(
             {
@@ -150,8 +162,8 @@ module.exports = {
         board.save();
     },
 
+    // change la position d'une note
     editNotePosition: function(board, noteId, x, y) {
-        //console.log("EditNotePosition : x =" + x + ", y =" + y + "noteid =" + noteId );
         boards.updateOne(
         { 
             "_id": mongoose.Types.ObjectId(board._id),
@@ -170,6 +182,7 @@ module.exports = {
         board.save();
     },
 
+    // supprime une note
     deleteNote: function(board, noteId) {
         boards.updateOne(
             {
@@ -191,6 +204,7 @@ module.exports = {
         board.save();
     },
 
+    // supprime un utilisateur d'un tableau
     removeUserFromBoard: function(board, userId) {
         boards.updateOne(
             {
@@ -213,6 +227,7 @@ module.exports = {
     },
 
 
+    // ajoute un utilisateur à un tableau
     addUserToBoard: function(board, userId, userName) {
         if (board.users.some(e => e.name === userName)) {
             return "error";
