@@ -177,95 +177,11 @@ $(document).ready(function() {
 					}
 				}
 			}
-			
-			//Gestion du bleu
-		/* 	if(document.getElementById("filtreBlue").classList.contains("activeFilter")) {
-				if (!filter.includes("blue")){
-					filter += "blue ";
-				}
-				
-			}
-			else {
-				if(filter.includes("blue")) {
-					filter = filter.replace('blue ','');
-				}
-			}
-
-			//Gestion du vert
-			if(document.getElementById("filtreGreen").classList.contains("activeFilter")) {
-				if(!filter.includes("green")) {
-					filter += "green ";
-				}
-			}
-			else {
-				if(filter.includes("green")) {
-					filter = filter.replace('green ','');
-				}
-			}
-
-
-			//Gestion du jaune
-			if(document.getElementById("filtreYellow").classList.contains("activeFilter")) {
-				if (!filter.includes("yellow")) {
-					filter += "yellow ";
-				}
-			}
-			else {
-				if(filter.includes("yellow")) {
-					filter = filter.replace('yellow ','');
-				}
-			}
-
-
-			//Gestion du orange
-			if(document.getElementById("filtreOrange").classList.contains("activeFilter")) {
-				if(!filter.includes("orange")) {
-					filter += "orange ";
-				}
-			}
-			else {
-				if(filter.includes("orange")) {
-					filter = filter.replace('orange ','');
-				}
-			}
-
-			//Gestion du rouge
-			if(document.getElementById("filtreRed").classList.contains("activeFilter")){
-				if(!filter.includes("red")) {
-					filter += "red ";
-				}				
-			}
-			else {				
-				if(filter.includes("red")) {					
-					filter = filter.replace("red ","");
-				}
-			} */
-			
-			/*
-			var activeFilters = document.getElementsByClassName("activeFilter");
-			for(let j=0; j<activeFilters.length;j++){
-				console.log("active " + activeFilters[j]);
-			}
-			var listeCouleurs = [];
-			for (let index = 0; index < activeFilters.length; ++index) {
-				listeCouleurs[index] = activeFilters[index].backgroundColor;
-				console.log("aaaaaaaaaaa" +activeFilters[index].background);								
-			}
-			$("#notesBoard").children().each(function() {
-				if (!listeCouleurs.includes(this.style.background)){
-					this.style.display = "none";
-					console.log("1" + this.style.background);
-				}
-				
-			}) */
-			
 		} 
-		colorFilter();		
-	
+		colorFilter();
 	}));
 
 	
-
 	// choix de la couleur d'une note
 	$('.notes ul').on('click', 'li .chooseColor', (function() {       
 		var _id = this.parentNode.firstElementChild.id;
@@ -307,7 +223,7 @@ $(document).ready(function() {
 	}));
 
 
-	// Fermetrure modal choix couleur
+	// Fermeture modal choix couleur
 	spanCloseModal.onclick = function() {
 		modal.style.display = "none";
 	}

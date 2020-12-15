@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 module.exports = {
+	// mapping des utilisateurs
 	users: function() {
 		const usersSchema = new mongoose.Schema({
 			_id:  Object,
@@ -10,6 +11,7 @@ module.exports = {
 		return mongoose.model('users', usersSchema, 'users');
 	},
 
+	// mapping des tableaux
 	boards: function() {
 		const boardsSchema = new mongoose.Schema({
 			_id: Object,

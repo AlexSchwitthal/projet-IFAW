@@ -1,7 +1,6 @@
 const express = require("express");
 var session = require('express-session');
 const bodyParser = require('body-parser');
-//const cookieParser = require('cookie-parser');
 
 // initialisation de l'application et de la session
 const app = express();
@@ -24,12 +23,6 @@ app.use(function(req, res, next) {
 	if(ssn.login) {
 		res.locals.login = ssn.login;
 		res.locals.password = ssn.password;
-
-		/* 		var cookie = req.cookies.login;
-		if (cookie === undefined) {
-		  	res.cookie('login', ssn.login, { maxAge: 900000, httpOnly: true });
-		  	res.cookie('nbConnexions', 0, { maxAge: 900000, httpOnly: true });
-		}  */
 	}
 	next();
 });
