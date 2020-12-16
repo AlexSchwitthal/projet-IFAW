@@ -58,7 +58,7 @@ $(document).ready(function() {
 				$noteElt.css("left", "0px");
 				$noteElt.css("top", "0px");
                 $noteElt.draggable(draggableOption).click(function() {
-                    $(this).draggable( {disabled: false, containment: [ 100, 100, 500, 500 ]});
+                    $(this).draggable( {disabled: false });
                 }).dblclick(function() {
                     $(this).draggable({ disabled: true });
                 });
@@ -364,7 +364,7 @@ $(document).ready(function() {
                     var noteElt = $(noteElement(note._id, note.text, note.color, note.x, note.y));
                     $(".notes > ul").append(noteElt);
                     noteElt.draggable(draggableOption).click(function() {
-                        $(this).draggable( {disabled: false, containment: [ 100, 100, 500, 500 ]});
+                        $(this).draggable( {disabled: false});
                     }).dblclick(function() {
                         $(this).draggable({ disabled: true });
                     });
