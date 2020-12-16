@@ -5,7 +5,6 @@ $(document).ready(function() {
             isTyping = true;
         },
         stop: function( event, ui ) {
-            //$("p", ui.helper).attr("id")
             isTyping = false;
             var id = this.querySelector("p").getAttribute("id");
             if (searchTimeout != undefined) clearTimeout(searchTimeout);
@@ -59,7 +58,7 @@ $(document).ready(function() {
 				$noteElt.css("left", "0px");
 				$noteElt.css("top", "0px");
                 $noteElt.draggable(draggableOption).click(function() {
-                    $(this).draggable( {disabled: false });
+                    $(this).draggable( {disabled: false, containment: [ 100, 100, 500, 500 ]});
                 }).dblclick(function() {
                     $(this).draggable({ disabled: true });
                 });
@@ -360,15 +359,12 @@ $(document).ready(function() {
 
 				// chargement des nouvelles notes
 				$(".notes > ul").empty();
-				/*for(let note of response.board.notes) {
-					$(".notes > ul").append(noteElement(note._id, note.text, note.color));
-				}*/
 				for(let note of response.board.notes) {
                     // ajout positions x et y
                     var noteElt = $(noteElement(note._id, note.text, note.color, note.x, note.y));
                     $(".notes > ul").append(noteElt);
                     noteElt.draggable(draggableOption).click(function() {
-                        $(this).draggable( {disabled: false});
+                        $(this).draggable( {disabled: false, containment: [ 100, 100, 500, 500 ]});
                     }).dblclick(function() {
                         $(this).draggable({ disabled: true });
                     });
