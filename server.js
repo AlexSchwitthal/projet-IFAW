@@ -13,7 +13,6 @@ const queries = require('./models/queries.js');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json()); 
-//app.use(cookieParser());
 app.use(express.static('public'));
 app.set('view engine', 'ejs');
 
@@ -43,7 +42,6 @@ app.post('/login', (req, res) => {
 			ssn = req.session;
 			ssn.login = req.body.username;
 			ssn.password = req.body.password;
-			//res.cookie('nbConnexions', ++req.cookies.nbConnexions, { maxAge: 900000, httpOnly: true });
 			res.redirect('/notes');
 		}
 		else {
