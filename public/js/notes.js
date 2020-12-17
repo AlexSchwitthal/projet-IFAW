@@ -38,7 +38,7 @@ $(document).ready(function() {
 		if(!isTyping) {
 			changeBoard($('#listBoards').val());
 		}
-	}, 5000);
+	}, 10000);
 
 	// ajout d'une note
 	$("#addNote").click(function() {
@@ -57,12 +57,11 @@ $(document).ready(function() {
 				$noteElt.css("left", "10px");*/
 				$noteElt.css("left", "0px");
 				$noteElt.css("top", "0px");
-                $noteElt.draggable(draggableOption).click(function() {
+                $noteElt.draggable({containment: "parent"}, draggableOption).click(function() {
                     $(this).draggable( {disabled: false });
                 }).dblclick(function() {
                     $(this).draggable({ disabled: true });
                 });
-				//$noteElt.draggable();
 				var data = {};
 				data._id = newNote._id;
 				data.x = 0;
@@ -363,12 +362,11 @@ $(document).ready(function() {
                     // ajout positions x et y
                     var noteElt = $(noteElement(note._id, note.text, note.color, note.x, note.y));
                     $(".notes > ul").append(noteElt);
-                    noteElt.draggable(draggableOption).click(function() {
+                    noteElt.draggable({containment: "parent"}, draggableOption).click(function() {
                         $(this).draggable( {disabled: false});
                     }).dblclick(function() {
-                        $(this).draggable({ disabled: true });
+                        $(this).draggable({ disabled: true});
                     });
-                    //noteElt.draggable();
                 }
 				colorFilter();
 
