@@ -53,10 +53,8 @@ $(document).ready(function() {
             success : function(newNote) {
                 var $noteElt = $(noteElement(newNote._id, newNote.text, newNote.color));
                 $(".notes > ul").append($noteElt);
-                /*$noteElt.css("top", "10px");
-				$noteElt.css("left", "10px");*/
-				$noteElt.css("left", "0px");
-				$noteElt.css("top", "0px");
+				$noteElt.css("left", "100px");
+				$noteElt.css("top", "100px");
                 $noteElt.draggable({containment: "parent"}, draggableOption).click(function() {
                     $(this).draggable( {disabled: false });
                 }).dblclick(function() {
